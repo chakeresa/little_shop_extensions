@@ -12,13 +12,7 @@ class SessionsController < ApplicationController
       end
       session[:user_id] = user.id
       flash[:success] = "Welcome, #{user.name}!"
-      if current_user.admin?
-        redirect_to root_path
-      elsif current_user.merchant?
-        redirect_to merchant_dashboard_path
-      else
-        redirect_to profile_path
-      end
+      redirect_based_on_user_type
     else
       flash[:danger] = "Incorrect Username/Password Combination"
       render :new
@@ -29,5 +23,15 @@ class SessionsController < ApplicationController
     reset_session
     flash[:success] = "You are logged out!"
     redirect_to root_path
+  end
+
+  def redirect_based_on_user_type
+    if current_user.admin?
+      redirect_to root_path
+    elsif current_user.merchant?
+      redirect_to merchant_dashboard_path
+    else
+      redirect_to profile_path
+    end
   end
 end

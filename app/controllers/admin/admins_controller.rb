@@ -7,7 +7,7 @@ class Admin::AdminsController < Admin::BaseController
   end
 
   def ship_order
-    order = Order.find(params[:format])
+    order = Order.find(params[:id])
     order.update(status: 'shipped')
     flash[:success] = "#{order.id} has been shipped!"
     redirect_to admin_dashboard_path

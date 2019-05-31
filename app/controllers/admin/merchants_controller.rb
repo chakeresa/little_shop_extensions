@@ -4,7 +4,7 @@ class Admin::MerchantsController < Admin::BaseController
     @pending_orders = Order.pending_merchant_orders(@merchant)
     if @merchant.user?
       redirect_to admin_user_path(@merchant)
-    end 
+    end
   end
 
   def index
@@ -14,14 +14,14 @@ class Admin::MerchantsController < Admin::BaseController
   def disable
     merchant = User.find(params[:id])
     merchant.update(active: false)
-    flash[:notice] = "#{merchant.name}'s account is now disabled."
+    flash[:success] = "#{merchant.name}'s account is now disabled."
     redirect_to admin_merchants_path
   end
 
   def enable
     merchant = User.find(params[:id])
     merchant.update(active: true)
-    flash[:notice] = "#{merchant.name}'s account is now enabled.'"
+    flash[:success] = "#{merchant.name}'s account is now enabled.'"
     redirect_to admin_merchants_path
   end
 

@@ -8,10 +8,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
-      flash[:welcome] = "Welcome, #{@user.name}"
+      flash[:success] = "Welcome, #{@user.name}"
       redirect_to '/profile'
     else
-      flash[:error] = @user.errors.full_messages.join(". ")
+      flash[:danger] = @user.errors.full_messages.join(". ")
       render :new
     end
   end

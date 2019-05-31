@@ -9,7 +9,7 @@ class Merchant::OrderItemsController < Merchant::BaseController
       order.update(status: 'packaged')
     end
 
+    flash[:success] = "The item was fulfilled"
     redirect_to merchant_order_path(order)
-    flash[:message] = "Your item was fulfilled."
   end
 end

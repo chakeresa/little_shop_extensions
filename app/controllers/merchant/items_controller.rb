@@ -13,7 +13,7 @@ class Merchant::ItemsController < Merchant::BaseController
       flash[:success] = "#{@item.name} has been added"
       redirect_to merchant_items_path
     else
-      flash[:error] = @item.errors.full_messages.join(". ")
+      flash[:danger] = @item.errors.full_messages.join(". ")
       render :new
     end
   end
@@ -42,7 +42,7 @@ class Merchant::ItemsController < Merchant::BaseController
 
   def destroy
     item = Item.destroy(params[:id])
-    flash[:notice] = "You have deleted #{item.name}."
+    flash[:success] = "You have deleted #{item.name}."
     redirect_to merchant_items_path
   end
 
@@ -65,7 +65,7 @@ class Merchant::ItemsController < Merchant::BaseController
       flash[:success] = "#{@item.name} has been updated"
       redirect_to merchant_items_path
     else
-      flash[:error] = @item.errors.full_messages.join(". ")
+      flash[:danger] = @item.errors.full_messages.join(". ")
       render :edit
     end
   end

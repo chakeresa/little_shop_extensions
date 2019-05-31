@@ -16,7 +16,7 @@ class User::OrdersController < User::BaseController
       order_item.cancel
     end
 
-    flash[:notice] = "Order #{order.id} has been cancelled"
+    flash[:success] = "Order #{order.id} has been cancelled"
     redirect_to profile_path
   end
 end

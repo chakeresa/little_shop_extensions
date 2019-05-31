@@ -10,7 +10,7 @@
   <div id="item-<%= item.id %>">
     <h3><%= link_to item.name, item_path(item) %></h3>
     <p><%= item.description %></p>
-    <%= image_tag item.image || @default_image, alt: "image of #{item.name}" %>
+    <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}" %>
     <p>Price: <%= number_to_currency(@order.item_price(item)) %> each</p>
     <p>Quantity: <%= @order.item_quantity(item) %></p>
     <p>Subtotal: <%= number_to_currency(@order.item_subtotal(item)) %> each</p>

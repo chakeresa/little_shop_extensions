@@ -1,5 +1,5 @@
 <h2><%= @item.name %></h2>
-<%= image_tag @item.image || @default_image, alt: "image of #{@item.name}" %>
+<%= tag :img, src: @item.image || @default_image, alt: "image of #{@item.name}" %>
 <p>Description: <%= @item.description %></p>
 <p>Merchant Name: <%= @merchant.name %></p>
 <p><%= @item.inventory %> in stock</p>

@@ -6,7 +6,7 @@
 <% @order.merchant_items(@merchant).each do |item| %>
   <div id="items-index-<%= item.id %>" class="card mb-3">
     <div class="row no-gutters">
-      <%= image_tag item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
+      <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
       <div class = "col-md-9 card-body">
         <h5 class="card-title"><%= link_to item.name, item_path(item) %></h5>
         <p>Purchase Price: <%= number_to_currency(item.purchase_price(@order)) %></p>

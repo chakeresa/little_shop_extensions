@@ -204,5 +204,21 @@ RSpec.describe Order, type: :model do
       expect(@order_1.total_value_for_merchant(@merchant)).to eq(6)
       expect(@order_2.total_value_for_merchant(@merchant)).to eq(11.75)
     end
+
+    it "#cancel cancels the order and its order_items" do
+      order = create(:order)
+      other_order = create(:order)
+      order_item_1 = create(:fulfilled_order_item, order: order)
+      order_item_2 = create(:order_item, order: order)
+      order_item_3 = create(:fulfilled_order_item, order: other_order)
+
+      order.cancel
+
+      expect(order.reload.status).to eq("cancelled")
+      expect(other_order.reload.status).to eq("pending")
+      expect(order_item_1.reload.fulfilled).to eq(false)
+      expect(order_item_2.reload.fulfilled).to eq(false)
+      expect(order_item_3.reload.fulfilled).to eq(true)
+    end
   end
 end

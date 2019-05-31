@@ -65,7 +65,7 @@ RSpec.describe "As a visitor", type: :feature do
         expect(page).to have_content(@item_1.inventory - 1)
       end
 
-      expect(page).to have_content("You now removed 1 #{@item_1.name} in your cart.")
+      expect(page).to have_content("You have removed 1 #{@item_1.name} from your cart.")
 
       within "#item-#{@item_1.id}" do
         click_button "-"

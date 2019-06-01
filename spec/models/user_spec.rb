@@ -13,6 +13,7 @@ RSpec.describe User, type: :model do
     it {should have_many :items}
     it {should have_many :orders}
     it {should have_many :addresses}
+    it {should have_one :primary_address}
   end
 
   describe 'Class Methods' do

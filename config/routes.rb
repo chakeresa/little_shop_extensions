@@ -51,7 +51,7 @@ Rails.application.routes.draw do
   # ADMIN ROUTES
   namespace :admin do
     get '/dashboard', to: "admins#show"
-    patch '/orders/:id/ship', to: "admins#ship_order", as: :ship_order # to-do: change path & add alias. needs :id
+    patch '/orders/:id/ship', to: "admins#ship_order", as: :ship_order
     resources :merchants, only: [:index, :show]
     patch '/merchants/:id/disable', to: "merchants#disable", as: :disable_merchant
     patch '/merchants/:id/enable', to: "merchants#enable", as: :enable_merchant

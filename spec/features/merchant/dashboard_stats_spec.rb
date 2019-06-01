@@ -3,10 +3,21 @@ require 'rails_helper'
 RSpec.describe "As a merchant" do
   describe "When I visit my dashboard, I see an area with statistics" do
     before :each do
-      @user_1 = create(:user, city: "Glendale", state: "CO")
-      @user_2 = create(:user, city: "Glendale", state: "IA")
-      @user_3 = create(:user, city: "Glendale", state: "CA")
-      @user_4 = create(:user, city: "Golden", state: "CO")
+      @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1, city: "Glendale", state: "CO")
+      @user_1.update(primary_address: @addr_1)
+
+      @user_2 = create(:user)
+      @addr_2 = create(:address, user: @user_2, city: "Glendale", state: "IA")
+      @user_2.update(primary_address: @addr_2)
+
+      @user_3 = create(:user)
+      @addr_3 = create(:address, user: @user_3, city: "Glendale", state: "CA")
+      @user_3.update(primary_address: @addr_3)
+
+      @user_4 = create(:user)
+      @addr_4 = create(:address, user: @user_4, city: "Golden", state: "CO")
+      @user_4.update(primary_address: @addr_4)
 
       @merchant_1 = create(:merchant)
       @item_1 = create(:item, user: @merchant_1, inventory: 20)
@@ -21,20 +32,20 @@ RSpec.describe "As a merchant" do
       @item_8 = create(:item, user: @merchant_2)
 
       #shipped orders
-      @order_1 = create(:shipped_order, user: @user_1)
-      @order_2 = create(:shipped_order, user: @user_2)
-      @order_3 = create(:shipped_order, user: @user_3)
-      @order_4 = create(:shipped_order, user: @user_4)
-      @order_5 = create(:shipped_order, user: @user_3)
+      @order_1 = create(:shipped_order, user: @user_1, address: @addr_1)
+      @order_2 = create(:shipped_order, user: @user_2, address: @addr_2)
+      @order_3 = create(:shipped_order, user: @user_3, address: @addr_3)
+      @order_4 = create(:shipped_order, user: @user_4, address: @addr_4)
+      @order_5 = create(:shipped_order, user: @user_3, address: @addr_3)
 
       #pending order
-      @order_6 = create(:order, user: @user_3)
+      @order_6 = create(:order, user: @user_3, address: @addr_3)
 
       #cancelled order
-      @order_7 = create(:cancelled_order, user: @user_1)
+      @order_7 = create(:cancelled_order, user: @user_1, address: @addr_1)
 
       #packaged order
-      @order_8 = create(:packaged_order, user: @user_2)
+      @order_8 = create(:packaged_order, user: @user_2, address: @addr_2)
 
       #shipped orders
       @order_item_1 = create(:fulfilled_order_item, item: @item_1, quantity: 2, order: @order_1, price_per_item: 100)
@@ -56,8 +67,6 @@ RSpec.describe "As a merchant" do
       @order_item_10 = create(:fulfilled_order_item, item: @item_2, order: @order_6, price_per_item: 100)
       @order_item_11 = create(:fulfilled_order_item, item: @item_2, order: @order_7, price_per_item: 100)
       @order_item_12 = create(:fulfilled_order_item, item: @item_2, order: @order_8, price_per_item: 100)
-
-      #include previously active item that were shipped. Item is now inactive.
     end
 
     it "displays top five items sold by quantity" do

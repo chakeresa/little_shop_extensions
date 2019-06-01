@@ -25,11 +25,29 @@ class Order < ApplicationRecord
   end
 
   def self.pending_merchant_orders(merchant)
-    Order.joins(items: :order_items)
+    self.joins(items: :order_items)
         .where(status: 0)
         .where("items.user_id = ?", merchant.id)
         .distinct
         .order(:id)
+  end
+
+  def self.top_3_states
+    self.joins(:address)
+        .select("addresses.state, count(orders) as order_count")
+        .group("addresses.state")
+        .where("orders.status = 2")
+        .order("order_count DESC")
+        .limit(3)
+  end
+
+  def self.top_3_cities
+    self.joins(:address)
+       .select("addresses.state, addresses.city, count(orders) as order_count")
+       .group("addresses.state, addresses.city")
+       .where("orders.status = 2")
+       .order("order_count DESC")
+       .limit(3)
   end
 
   def self.top_3_by_quantity

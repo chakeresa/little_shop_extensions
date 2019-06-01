@@ -59,53 +59,61 @@ RSpec.describe User, type: :model do
         @item_3 = create(:item, user: @merchant_5)
 
         ####### @user_1
-        @user_1 = create(:user, city: "Springfield", state: "KS")
+        @user_1 = create(:user)
+        @addr_1 = create(:address, user: @user_1, city: "Springfield", state: "KS")
+        @user_1.update(primary_address: @addr_1)
 
-        @order_1 = create(:shipped_order, user: @user_1) # total_quantity = 101
+        @order_1 = create(:shipped_order, user: @user_1, address: @addr_1) # total_quantity = 101
         # merchant_1:
         @oi_1 = create(:fulfilled_order_item, order: @order_1, item: @item_1, quantity: 100, price_per_item: 0.50)
         # merchant_2:
         @oi_2 = create(:fulfilled_order_item, order: @order_1, item: @item_2, quantity: 1, price_per_item: 30.0)
 
         ####### @user_2
-        @user_2 = create(:user, city: "Springfield", state: "IL")
+        @user_2 = create(:user)
+        @addr_2 = create(:address, user: @user_2, city: "Springfield", state: "IL")
+        @user_2.update(primary_address: @addr_2)
 
-        @order_2 = create(:shipped_order, user: @user_2) # total_quantity = 2200
+        @order_2 = create(:shipped_order, user: @user_2, address: @addr_2) # total_quantity = 2200
         # merchant_1:
         @oi_7 = create(:fulfilled_order_item, order: @order_2, item: @item_1, quantity: 200, price_per_item: 0.05)
         # merchant_1:
         @oi_3 = create(:fulfilled_order_item, order: @order_2, item: @item_3, quantity: 2000, price_per_item: 100.0)
 
         ####### @user_3
-        @user_3 = create(:user, city: "Topeka", state: "KS")
+        @user_3 = create(:user)
+        @addr_3 = create(:address, user: @user_3, city: "Topeka", state: "KS")
+        @user_3.update(primary_address: @addr_3)
 
-        @order_3 = create(:order, user: @user_3) # pending order
+        @order_3 = create(:order, user: @user_3, address: @addr_3) # pending order
         # merchant_3 / pending order -- should not be included in stats for sales:
         @oi_4 = create(:fulfilled_order_item, order: @order_3, item: @item_4, quantity: 300, price_per_item: 20.0)
 
-        @order_4 = create(:cancelled_order, user: @user_3)
+        @order_4 = create(:cancelled_order, user: @user_3, address: @addr_3)
         # merchant_3 / cancelled order -- should not be included in stats for sales:
         @oi_5 = create(:fulfilled_order_item, order: @order_4, item: @item_4, quantity: 400, price_per_item: 13.0)
 
-        @order_5 = create(:packaged_order, user: @user_3)
+        @order_5 = create(:packaged_order, user: @user_3, address: @addr_3)
         # merchant_3 / packaged order -- should not be included in stats for sales:
         @oi_6 = create(:fulfilled_order_item, order: @order_5, item: @item_5, quantity: 410, price_per_item: 25.0)
 
-        @order_7 = create(:shipped_order, user: @user_3) # total_quantity = 1
+        @order_7 = create(:shipped_order, user: @user_3, address: @addr_3) # total_quantity = 1
         # merchant_2:
         @oi_9 = create(:fulfilled_order_item, order: @order_7, item: @item_2, quantity: 1, price_per_item: 1.0)
 
-        @order_9 = create(:shipped_order, user: @user_3)
-        @order_10 = create(:shipped_order, user: @user_3)
+        @order_9 = create(:shipped_order, user: @user_3, address: @addr_3)
+        @order_10 = create(:shipped_order, user: @user_3, address: @addr_3)
 
         ####### @user_4
-        @user_4 = create(:user, city: "Denver", state: "CO")
+        @user_4 = create(:user)
+        @addr_4 = create(:address, user: @user_4, city: "Denver", state: "CO")
+        @user_4.update(primary_address: @addr_4)
 
-        @order_8 = create(:shipped_order, user: @user_4) # total_quantity = 1
+        @order_8 = create(:shipped_order, user: @user_4, address: @addr_4) # total_quantity = 1
         # merchant_3:
         @oi_10 = create(:fulfilled_order_item, order: @order_8, item: @item_4, quantity: 1, price_per_item: 1.0)
 
-        @order_6 = create(:shipped_order, user: @user_4) # total_quantity = 5
+        @order_6 = create(:shipped_order, user: @user_4, address: @addr_4) # total_quantity = 5
         # merchant_4:
         @oi_8 = create(:fulfilled_order_item, order: @order_6, item: @item_6, quantity: 5, price_per_item: 10000.0)
       end
@@ -137,32 +145,6 @@ RSpec.describe User, type: :model do
 
         actual = User.top_3_merch_by_quantity.map(&:total_quantity)
         expect(actual).to eq(top_3_merchant_quantities)
-      end
-
-      it '::top_3_states shows shows the top 3 states where any orders were shipped (by number of orders), and count of orders' do
-        top_3_states = ["KS", "CO", "IL"]
-        top_3_states_order_counts = [4, 2, 1]
-
-        actual_states = User.top_3_states.map(&:state)
-        expect(actual_states).to eq(top_3_states)
-
-        actual_counts = User.top_3_states.map(&:order_count)
-        expect(actual_counts).to eq(top_3_states_order_counts)
-      end
-
-      it '::top_3_cities shows the top 3 city/state combos where any orders were shipped (by number of orders), and count of orders' do
-        top_3_cities = ["Topeka", "Denver", "Springfield"]
-        top_3_states = ["KS", "CO", "IL"]
-        top_3_cities_order_counts = [3, 2, 1]
-
-        actual_cities = User.top_3_cities.map(&:city)
-        expect(actual_cities).to eq(top_3_cities)
-
-        actual_states = User.top_3_cities.map(&:state)
-        expect(actual_states).to eq(top_3_states)
-
-        actual_counts = User.top_3_cities.map(&:order_count)
-        expect(actual_counts).to eq(top_3_cities_order_counts)
       end
     end
 
@@ -262,10 +244,21 @@ RSpec.describe User, type: :model do
 
   describe 'instance methods' do
     before :each do
-      @user_1 = create(:user, city: "Glendale", state: "CO")
-      @user_2 = create(:user, city: "Glendale", state: "IA")
-      @user_3 = create(:user, city: "Glendale", state: "CA")
-      @user_4 = create(:user, city: "Golden", state: "CO")
+      @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1, city: "Glendale", state: "CO")
+      @user_1.update(primary_address: @addr_1)
+
+      @user_2 = create(:user)
+      @addr_2 = create(:address, user: @user_2, city: "Glendale", state: "IA")
+      @user_2.update(primary_address: @addr_2)
+
+      @user_3 = create(:user)
+      @addr_3 = create(:address, user: @user_3, city: "Glendale", state: "CA")
+      @user_3.update(primary_address: @addr_3)
+
+      @user_4 = create(:user)
+      @addr_4 = create(:address, user: @user_4, city: "Golden", state: "CO")
+      @user_4.update(primary_address: @addr_4)
 
       @merchant_1 = create(:merchant)
       @item_1 = create(:item, user: @merchant_1, inventory: 20)
@@ -280,20 +273,20 @@ RSpec.describe User, type: :model do
       @item_8 = create(:item, user: @merchant_2)
 
       #shipped orders
-      @order_1 = create(:shipped_order, user: @user_1)
-      @order_2 = create(:shipped_order, user: @user_2)
-      @order_3 = create(:shipped_order, user: @user_3)
-      @order_4 = create(:shipped_order, user: @user_4)
-      @order_5 = create(:shipped_order, user: @user_3)
+      @order_1 = create(:shipped_order, user: @user_1, address: @addr_1)
+      @order_2 = create(:shipped_order, user: @user_2, address: @addr_2)
+      @order_3 = create(:shipped_order, user: @user_3, address: @addr_3)
+      @order_4 = create(:shipped_order, user: @user_4, address: @addr_4)
+      @order_5 = create(:shipped_order, user: @user_3, address: @addr_3)
 
       #pending order
-      @order_6 = create(:order, user: @user_3)
+      @order_6 = create(:order, user: @user_3, address: @addr_3)
 
       #cancelled order
-      @order_7 = create(:cancelled_order, user: @user_1)
+      @order_7 = create(:cancelled_order, user: @user_1, address: @addr_1)
 
       #packaged order
-      @order_8 = create(:packaged_order, user: @user_2)
+      @order_8 = create(:packaged_order, user: @user_2, address: @addr_2)
 
       #shipped orders
       @order_item_1 = create(:fulfilled_order_item, item: @item_1, quantity: 2, order: @order_1, price_per_item: 100)
@@ -315,24 +308,21 @@ RSpec.describe User, type: :model do
       @order_item_10 = create(:fulfilled_order_item, item: @item_2, order: @order_6, price_per_item: 100)
       @order_item_11 = create(:fulfilled_order_item, item: @item_2, order: @order_7, price_per_item: 100)
       @order_item_12 = create(:fulfilled_order_item, item: @item_2, order: @order_8, price_per_item: 100)
-
-      #include previously active item that were shipped. Item is now inactive.
     end
 
-    it "can find top five items by quantity" do
+    it "#top_five_items finds top five items by quantity for a particular merchant" do
       top_five = [@item_2, @item_5, @item_3, @item_4, @item_6]
       expect(@merchant_1.top_five_items).to eq(top_five)
     end
 
-    it "can calculate total quantities sold and inventory ratio" do
+    it "#inventory_ratio calculates total quantities sold and inventory ratio for a particular merchant" do
       total_sold = 38
       inventory_ratio = (38/120.0)*100
       expect(@merchant_1.total_sold).to eq(total_sold)
       expect(number_to_percentage(@merchant_1.inventory_ratio)).to eq(number_to_percentage(inventory_ratio))
     end
 
-    it "calculates top 3 state where items were shipped and their quantities " do
-
+    it "#top_three_states calculates top 3 state where items were shipped and their quantities for a particular merchant" do
       top_three_states = ["CO", "CA", "IA"]
 
       answer_1 = @merchant_1.top_three_states.map(&:state)
@@ -345,8 +335,7 @@ RSpec.describe User, type: :model do
       expect(answer_2).to eq(top_three_quantities)
     end
 
-    it "calculates top 3 city where items were shipped and their quantities " do
-
+    it "#top_three_cities calculates top 3 city where items were shipped and their quantities for a particular merchant" do
       top_three_cities = ["Glendale", "Glendale", "Golden"]
       top_three_states = ["CA", "CO", "CO"]
       quantities = [12, 10, 9]
@@ -360,15 +349,15 @@ RSpec.describe User, type: :model do
       expect(answer_3).to eq(quantities)
     end
 
-    it 'calculates top user with most orders and their orders quantity' do
+    it 'calculates top user with most orders and their orders quantity for a particular merchant' do
       expect(@merchant_1.top_user_orders).to eq(@user_3)
     end
 
-    it 'calculates top user with most items and their items quantity' do
+    it 'calculates top user with most items and their items quantity for a particular merchant' do
       expect(@merchant_1.top_user_items).to eq(@user_3)
     end
 
-    it 'calculates top 3 users with most money spent and their totals' do
+    it 'calculates top 3 users with most money spent and their totals for a particular merchant' do
       expect(@merchant_1.top_3_spenders).to eq([@user_3, @user_1, @user_4])
     end
 

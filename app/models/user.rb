@@ -11,10 +11,8 @@ class User < ApplicationRecord
 
   has_many :addresses
   accepts_nested_attributes_for :addresses
-  # accepts_nested_attributes_for :addresses, reject_if: lambda { |fields| fields[:addresses_attributes].blank? }
 
   enum role: ['user', 'merchant', 'admin']
-
 
   has_secure_password
 
@@ -54,24 +52,6 @@ class User < ApplicationRecord
         .where("orders.status = 2")
         .order("total_quantity DESC")
         .limit(3)
-  end
-
-  def self.top_3_states
-    self.joins(:orders)
-        .select("users.state, count(orders) as order_count")
-        .group("users.state")
-        .where("orders.status = 2")
-        .order("order_count DESC")
-        .limit(3)
-  end
-
-  def self.top_3_cities
-   self.joins(:orders)
-       .select("users.state, users.city, count(orders) as order_count")
-       .group("users.state, users.city")
-       .where("orders.status = 2")
-       .order("order_count DESC")
-       .limit(3)
   end
 
   def self.average_fulfillment_times
@@ -121,23 +101,27 @@ class User < ApplicationRecord
   end
 
   def top_three_states
-    User
-      .select(:state, 'SUM(order_items.quantity) AS total_quantity')
-      .joins(orders: :items)
-      .where('orders.status = ?', 2)
-      .where('items.user_id = ?', self.id)
-      .group(:state)
-      .order('total_quantity DESC')
-      .limit(3)
+    items.joins("JOIN order_items ON order_items.item_id = items.id")
+         .joins("JOIN orders ON orders.id = order_items.order_id")
+         .joins("JOIN addresses ON orders.address_id = addresses.id")
+         .select("addresses.state")
+         .select("SUM(order_items.quantity) AS total_quantity")
+         .group("addresses.state")
+         .where("orders.status = 2")
+         .order("total_quantity DESC")
+         .limit(3)
   end
 
   def top_three_cities
-    items.select("users.city, users.state, sum(order_items.quantity) as total_quantity")
-         .joins(:orders)
-         .joins("join users On orders.user_id = users.id")
-         .group("users.city", "users.state")
+    items.joins("JOIN order_items ON order_items.item_id = items.id")
+         .joins("JOIN orders ON orders.id = order_items.order_id")
+         .joins("JOIN addresses ON orders.address_id = addresses.id")
+         .select("addresses.city")
+         .select("addresses.state")
+         .select("SUM(order_items.quantity) AS total_quantity")
+         .group("addresses.city", "addresses.state")
          .where("orders.status = 2")
-         .order("total_quantity desc")
+         .order("total_quantity DESC")
          .limit(3)
   end
 

@@ -46,6 +46,7 @@ class CartsController < ApplicationController
   end
 
   def checkout
+    # to-do: give the order the appropriate address
     new_order = current_user.orders.create
     cart.item_and_quantity_hash.each do |item, quantity|
       OrderItem.create(item: item, order: new_order, quantity: quantity, price_per_item: item.price)

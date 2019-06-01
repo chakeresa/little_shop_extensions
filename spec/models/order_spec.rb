@@ -10,6 +10,7 @@ RSpec.describe Order, type: :model do
     it {should have_many :order_items}
     it {should have_many(:items).through(:order_items)}
     it {should belong_to :user}
+    it {should belong_to(:address).optional}
   end
 
   describe "class methods" do

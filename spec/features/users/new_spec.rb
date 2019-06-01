@@ -16,12 +16,13 @@ RSpec.describe "User Registration form" do
     zip = "123311"
     password = "1233"
 
+
     fill_in "user[name]", with: name
-    fill_in "user[address]", with: street
-    fill_in "user[city]", with: city
-    fill_in "user[state]", with: state
+    fill_in "user[addresses_attributes][0][street]", with: street
+    fill_in "user[addresses_attributes][0][city]", with: city
+    fill_in "user[addresses_attributes][0][state]", with: state
+    fill_in "user[addresses_attributes][0][zip]", with: zip
     fill_in "user[email]", with: email
-    fill_in "user[zip]", with: zip
     fill_in "user[password]", with: password
     fill_in "user[password_confirmation]", with: password
 
@@ -36,9 +37,9 @@ RSpec.describe "User Registration form" do
     expect(new_user.email).to eq(email)
     expect(new_user.primary_address.nickname).to eq("home")
     expect(new_user.primary_address.street).to eq(street)
-    expect(new_user.primary_address.street).to eq(city)
-    expect(new_user.primary_address.street).to eq(state)
-    expect(new_user.primary_address.street).to eq(zip)
+    expect(new_user.primary_address.city).to eq(city)
+    expect(new_user.primary_address.state).to eq(state)
+    expect(new_user.primary_address.zip).to eq(zip)
   end
 
   context "put in wrong confirmation password" do

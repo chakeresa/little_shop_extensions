@@ -12,7 +12,7 @@
           <li>Order Id: <%= order.id %></li>
           <li>Order Status: <%= order.status %></li>
           <li>Created At: <%= Date.strptime(order.created_at.to_s) %></li>
-          <li><%= button_to "Ship", admin_dashboard_path(order), method: :patch %></li>
+          <li><%= button_to "Ship", admin_ship_order_path(order), method: :patch %></li>
         </ul>
 
       </div>

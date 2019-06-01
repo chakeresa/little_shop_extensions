@@ -69,7 +69,7 @@ RSpec.describe 'As a merchant: ' do
         expect(current_path).to eq(merchant_order_path(@order_2))
         expect(page).to have_content("Status: Fulfilled")
       end
-      expect(page).to have_content("Your item was fulfilled.")
+      expect(page).to have_content("The item was fulfilled")
     end
 
     it "displays a message if I don't have sufficient inventory to fulfill order" do

@@ -8,18 +8,11 @@ class User::UsersController < User::BaseController
 
   def update
     if current_user.email != params[:email].downcase && User.find_by(email: params[:email].downcase)
-      flash[:error] = "That email address is already in use"
+      flash[:danger] = "That email address is already in use"
       redirect_to profile_edit_path
       return
     else
-      if current_user.update(update_params.to_h)
-        flash[:notice] = "Your profile has been updated"
-        redirect_to profile_path
-      else
-        flash[:error] = current_user.errors.full_messages.join(". ")
-        redirect_to profile_edit_path
-        return
-      end
+      attempt_update
     end
   end
 
@@ -33,5 +26,16 @@ class User::UsersController < User::BaseController
     end
 
     altered_params
+  end
+
+  def attempt_update
+    if current_user.update(update_params.to_h)
+      flash[:success] = "Your profile has been updated"
+      redirect_to profile_path
+    else
+      flash[:danger] = current_user.errors.full_messages.join(". ")
+      redirect_to profile_edit_path
+      return
+    end
   end
 end

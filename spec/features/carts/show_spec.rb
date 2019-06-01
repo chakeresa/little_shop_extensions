@@ -48,7 +48,7 @@ RSpec.describe "cart show page", type: :feature do
       click_button "Empty Cart"
 
       expect(current_path).to eq(cart_path)
-      expect(page).to have_content("Your cart is now empty, anti-capitalist!")
+      expect(page).to have_content("Your cart is now empty")
 
       expect(page).to have_content("Cart: 0")
       expect(page).to_not have_link(@item_1.name)
@@ -118,7 +118,7 @@ RSpec.describe "cart show page", type: :feature do
       click_button "Empty Cart"
 
       expect(current_path).to eq(cart_path)
-      expect(page).to have_content("Your cart is now empty, anti-capitalist!")
+      expect(page).to have_content("Your cart is now empty")
 
       expect(page).to have_content("Cart: 0")
       expect(page).to_not have_link(@item_1.name)

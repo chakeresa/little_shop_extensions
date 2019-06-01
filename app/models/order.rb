@@ -92,4 +92,12 @@ class Order < ApplicationRecord
         .distinct
         .sum("order_items.quantity * order_items.price_per_item")
   end
+
+  def cancel
+    update(status: "cancelled")
+
+    order_items.each do |order_item|
+      order_item.cancel
+    end
+  end
 end

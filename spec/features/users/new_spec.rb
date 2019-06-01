@@ -51,11 +51,11 @@ RSpec.describe "User Registration form" do
       expect(current_path).to eq('/register')
 
       fill_in "user[name]", with: "Billy"
-      fill_in "user[address]", with: "123 go to santa lane"
-      fill_in "user[city]", with: "aurora"
-      fill_in "user[state]", with: "colorado"
       fill_in "user[email]", with: "billyurrutia@gmail.com"
-      fill_in "user[zip]", with: "123311"
+      fill_in "user[addresses_attributes][0][street]", with: "123 go to santa lane"
+      fill_in "user[addresses_attributes][0][city]", with: "aurora"
+      fill_in "user[addresses_attributes][0][state]", with: "colorado"
+      fill_in "user[addresses_attributes][0][zip]", with: "123311"
       fill_in "user[password]", with: "1233"
       fill_in "user[password_confirmation]", with: "123"
 
@@ -78,11 +78,11 @@ RSpec.describe "User Registration form" do
       visit '/register'
 
       fill_in "user[name]", with: "Billy"
-      fill_in "user[address]", with: "123 go to santa lane"
-      fill_in "user[city]", with: "aurora"
-      fill_in "user[state]", with: "colorado"
       fill_in "user[email]", with: "abc@gmail.com"
-      fill_in "user[zip]", with: "123311"
+      fill_in "user[addresses_attributes][0][street]", with: "123 go to santa lane"
+      fill_in "user[addresses_attributes][0][city]", with: "aurora"
+      fill_in "user[addresses_attributes][0][state]", with: "colorado"
+      fill_in "user[addresses_attributes][0][zip]", with: "123311"
       fill_in "user[password]", with: "1233"
       fill_in "user[password_confirmation]", with: "1233"
 
@@ -101,6 +101,7 @@ RSpec.describe "User Registration form" do
       new_user = User.last
 
       expect(page).to have_content("Welcome, #{new_user.name}")
+      expect(new_user.primary_address.city).to eq("aurora")
     end
   end
 end

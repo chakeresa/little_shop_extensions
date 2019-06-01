@@ -8,9 +8,10 @@ class User < ApplicationRecord
   has_many :orders
   has_many :items
   has_one :primary_address, class_name: 'Address'
-  
+
   has_many :addresses
   accepts_nested_attributes_for :addresses
+  # accepts_nested_attributes_for :addresses, reject_if: lambda { |fields| fields[:addresses_attributes].blank? }
 
   enum role: ['user', 'merchant', 'admin']
 

@@ -3,18 +3,15 @@ class User < ApplicationRecord
 
   validates_presence_of :email,
                         :name,
-                        :address,
-                        :city,
-                        :state,
-                        :zip,
+                        :password_digest,
                         :role
   has_many :orders
   has_many :items
+  has_many :addresses
 
   enum role: ['user', 'merchant', 'admin']
 
   validates :email, uniqueness: true, presence: true
-  validates_presence_of :password_digest
 
   has_secure_password
 

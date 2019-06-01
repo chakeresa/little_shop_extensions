@@ -42,6 +42,126 @@ RSpec.describe "User Registration form" do
     expect(new_user.primary_address.zip).to eq(zip)
   end
 
+  describe "missing fields" do
+    before(:each) do
+      @name = "Billy"
+      @street = "123 go to santa lane"
+      @city = "aurora"
+      @state = "colorado"
+      @email = "billyurrutia@gmail.com"
+      @zip = "123311"
+      @password = "1233"
+    end
+
+    it "form requires name input" do
+      visit register_path
+
+      # DON'T fill_in "user[name]", with: @name
+      fill_in "user[addresses_attributes][0][street]", with: @street
+      fill_in "user[addresses_attributes][0][city]", with: @city
+      fill_in "user[addresses_attributes][0][state]", with: @state
+      fill_in "user[addresses_attributes][0][zip]", with: @zip
+      fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Name can't be blank")
+    end
+
+    it "form requires street input" do
+      visit register_path
+
+      fill_in "user[name]", with: @name
+      # DON'T fill_in "user[addresses_attributes][0][street]", with: @street
+      fill_in "user[addresses_attributes][0][city]", with: @city
+      fill_in "user[addresses_attributes][0][state]", with: @state
+      fill_in "user[addresses_attributes][0][zip]", with: @zip
+      fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Addresses street can't be blank")
+    end
+
+    it "form requires city input" do
+      visit register_path
+
+      fill_in "user[name]", with: @name
+      fill_in "user[addresses_attributes][0][street]", with: @street
+      # DON'T fill_in "user[addresses_attributes][0][city]", with: @city
+      fill_in "user[addresses_attributes][0][state]", with: @state
+      fill_in "user[addresses_attributes][0][zip]", with: @zip
+      fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Addresses city can't be blank")
+    end
+
+    it "form requires state input" do
+      visit register_path
+
+      fill_in "user[name]", with: @name
+      fill_in "user[addresses_attributes][0][street]", with: @street
+      fill_in "user[addresses_attributes][0][city]", with: @city
+      # DON'T fill_in "user[addresses_attributes][0][state]", with: @state
+      fill_in "user[addresses_attributes][0][zip]", with: @zip
+      fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Addresses state can't be blank")
+    end
+
+    it "form requires zip input" do
+      visit register_path
+
+      fill_in "user[name]", with: @name
+      fill_in "user[addresses_attributes][0][street]", with: @street
+      fill_in "user[addresses_attributes][0][city]", with: @city
+      fill_in "user[addresses_attributes][0][state]", with: @state
+      # DON'T fill_in "user[addresses_attributes][0][zip]", with: @zip
+      fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Addresses zip can't be blank")
+    end
+
+    it "form requires email input" do
+      visit register_path
+
+      fill_in "user[name]", with: @name
+      fill_in "user[addresses_attributes][0][street]", with: @street
+      fill_in "user[addresses_attributes][0][city]", with: @city
+      fill_in "user[addresses_attributes][0][state]", with: @state
+      fill_in "user[addresses_attributes][0][zip]", with: @zip
+      # DON'T fill_in "user[email]", with: @email
+      fill_in "user[password]", with: @password
+      fill_in "user[password_confirmation]", with: @password
+
+      click_on "Register User"
+
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_content("Email can't be blank")
+    end
+  end
+
   context "put in wrong confirmation password" do
     it 'brings you back to the register page' do
       visit root_path

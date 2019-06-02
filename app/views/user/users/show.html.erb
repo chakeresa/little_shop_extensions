@@ -6,6 +6,8 @@
     <p><%= address.street %></p>
     <p><%= address.city %>, <%= address.state %></p>
     <p><%= address.zip %></p>
+    <br>
+    <%= button_to "Delete Address", delete_address_path(address), method: "delete", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
   </div>
 <% end %>
 

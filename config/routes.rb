@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   end
 
   patch '/users/:id', to: "user/users#update", as: :user
+  delete '/addresses/:id', to: "user/addresses#destroy", as: :delete_address
 
   scope :profile, module: :user, as: :user do
     resources :orders, only: [:index, :show]

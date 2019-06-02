@@ -34,6 +34,21 @@ RSpec.describe "profile page" do
       end
     end
 
+    it "has buttons to delete my addresses" do
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        expect(page).to have_button("Delete Address")
+      end
+
+      within("#address-#{@another_address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to_not have_content(@another_address.street)
+    end
+
     it "has a link to edit my profile data" do
       visit profile_path
 

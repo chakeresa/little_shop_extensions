@@ -64,6 +64,21 @@ RSpec.describe "profile page" do
       expect(@address.reload.id).to eq(original_addr_id)
     end
 
+    it "I can't delete an address with associated orders" do
+      order = create(:order, address: @address)
+      original_addr_id = @address.id
+
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("Cannot delete an address that was used for an order")
+      expect(@address.reload.id).to eq(original_addr_id)
+    end
+
     it "has a link to edit my profile data" do
       visit profile_path
 

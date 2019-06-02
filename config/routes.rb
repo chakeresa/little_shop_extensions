@@ -29,9 +29,10 @@ Rails.application.routes.draw do
   # PROFILE ROUTES (AS A USER)
   scope :profile, module: :user, as: :profile do
     get '/', to: "users#show"
-    patch '/', to: "users#update"
     get '/edit', to: "users#edit"
   end
+
+  patch '/users/:id', to: "user/users#update", as: :user
 
   scope :profile, module: :user, as: :user do
     resources :orders, only: [:index, :show]

@@ -1,29 +1,29 @@
 <div id="profile-edit-form">
-  <%= form_tag profile_path, method: :patch do %>
-    <%= label_tag :name %>
-    <%= text_field_tag :name, current_user.name, required: true %>
+  <%= form_for @user do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
     <br>
-    <%= label_tag :email %>
-    <%= email_field_tag :email, current_user.email, required: true %>
+    <%= f.label :email %>
+    <%= f.text_field :email, required: true %>
     <br>
-    <%= label_tag :password %>
-    <%= password_field_tag :password, nil %>
+    <%= f.label :password %>
+    <%= f.password_field :password, value: "" %>
     <br>
-    <%= label_tag :password_confirmation %>
-    <%= password_field_tag :password_confirmation, nil %>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, value: "" %>
     <br>
-    <%= label_tag :address %>
-    <%= text_field_tag :address, current_user.address, required: true %>
+    <%= f.label :address %>
+    <%= f.text_field :address, required: true %>
     <br>
-    <%= label_tag :city %>
-    <%= text_field_tag :city, current_user.city, required: true %>
+    <%= f.label :city %>
+    <%= f.text_field :city, required: true %>
     <br>
-    <%= label_tag :state %>
-    <%= text_field_tag :state, current_user.state, required: true %>
+    <%= f.label :state %>
+    <%= f.text_field :state, required: true %>
     <br>
-    <%= label_tag :zip %>
-    <%= text_field_tag :zip, current_user.zip, required: true %>
+    <%= f.label :zip %>
+    <%= f.text_field :zip, required: true %>
     <br>
-    <%= submit_tag 'Submit Changes' %>
+    <%= f.submit "Submit Changes" %>
   <% end %>
 </div>

@@ -187,13 +187,7 @@ RSpec.describe "User Registration form" do
 
   context 'email in use already' do
     it 'gives flash error email in use' do
-      User.create!(email: "ABC@gmail.com",
-                  name: "billy",
-                  city: "miami",
-                  state: "colorado",
-                  password: "123",
-                  zip: "111",
-                  address: "1233 s way")
+      create(:user, email: "ABC@gmail.com")
 
       visit '/register'
 

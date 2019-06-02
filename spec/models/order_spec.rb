@@ -4,6 +4,7 @@ RSpec.describe Order, type: :model do
 
   describe 'validates' do
     it {should validate_presence_of :status}
+    it {should validate_presence_of :address_id}
   end
 
   describe 'relationships' do

@@ -4,11 +4,17 @@ RSpec.describe "User Profile Orders Index", type: :feature do
   context "as a registered user" do
     before(:each) do
       @user = create(:user)
+      @addr_1 = create(:address, user: @user)
+      @addr_2 = create(:address, user: @user)
+
       @other_user = create(:user)
+      @other_addr = create(:address, user: @other_user)
+
       @merchant = create(:merchant)
-      @order_1 = create(:order, user: @user)
-      @order_2 = create(:order, user: @user)
-      @order_3 = create(:order, user: @other_user)
+
+      @order_1 = create(:order, user: @user, address: @addr_1)
+      @order_2 = create(:order, user: @user, address: @addr_2)
+      @order_3 = create(:order, user: @other_user, address: @other_addr)
       @item_1 = create(:item, user: @merchant)
       @item_2 = create(:item, user: @merchant)
       @item_3 = create(:item, user: @merchant)
@@ -29,6 +35,7 @@ RSpec.describe "User Profile Orders Index", type: :feature do
         expect(page).to have_content("Last Updated: #{@order_1.updated_at}")
         expect(page).to have_content("Status: #{@order_1.status}")
         expect(page).to have_content("Total Cost: #{number_to_currency(@order_1.grand_total)}")
+        expect(page).to have_content("Shipped to: #{@addr_1.street}, #{@addr_1.city}, #{@addr_1.state}, #{@addr_1.zip}")
       end
 
       within("#order-#{@order_2.id}") do
@@ -37,6 +44,8 @@ RSpec.describe "User Profile Orders Index", type: :feature do
         expect(page).to have_content("Last Updated: #{@order_2.updated_at}")
         expect(page).to have_content("Status: #{@order_2.status}")
         expect(page).to have_content("Total Cost: #{number_to_currency(@order_2.grand_total)}")
+        expect(page).to have_content("Shipped to: #{@addr_2.street}, #{@addr_2.city}, #{@addr_2.state}, #{@addr_2.zip}")
+
       end
 
       expect(page).to_not have_content("Order #{@order_3.id}")

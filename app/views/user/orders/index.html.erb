@@ -7,5 +7,6 @@
     <p>Last Updated: <%= order.updated_at %></p>
     <p>Status: <%= order.status %></p>
     <p>Total Cost: <%= number_to_currency(order.grand_total) %></p>
+    <p>Shipped to: <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.zip %></p>
   </div>
 <% end %>

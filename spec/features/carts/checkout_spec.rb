@@ -60,6 +60,35 @@ RSpec.describe "Cart checkout functionality: " do
     end
   end
 
+  describe "as a logged in regular user with no addresses" do
+    before(:each) do
+      @merchant_1 = create(:merchant)
+      @item_1 = create(:item, user: @merchant_1, name: "Sofa")
+      @item_2 = create(:item, user: @merchant_1, name: "Chair")
+
+      @user_1 = create(:user)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
+
+      visit item_path(@item_1)
+      click_button "Add to Cart"
+
+      visit item_path(@item_2)
+      click_button "Add to Cart"
+
+      visit item_path(@item_1)
+      click_button "Add to Cart"
+    end
+
+    it "I see a message to add an address" do
+      visit cart_path
+
+      expect(page).to have_content("Add an address to check out")
+      expect(page).to have_link('Add a New Address')
+      expect(page).to_not have_button('Check Out')
+    end
+  end
+
   context "as a visitor with items in my cart" do
     before(:each) do
       @merchant_1 = create(:merchant)

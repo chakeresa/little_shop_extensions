@@ -34,6 +34,10 @@ class CartsController < ApplicationController
   end
 
   def show
+    if current_user?
+      @addresses = current_user.addresses
+    end
+
     if current_user && (current_user.admin? || current_user.merchant?)
       render file: "/public/404", status: 404
     end

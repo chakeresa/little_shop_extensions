@@ -8,6 +8,10 @@ RSpec.describe "Cart checkout functionality: " do
       @item_2 = create(:item, user: @merchant_1, name: "Chair")
 
       @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1)
+      @addr_2 = create(:address, user: @user_1)
+      @user_1.update!(primary_address_id: @addr_2.id)
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
 
       visit item_path(@item_1)
@@ -28,6 +32,8 @@ RSpec.describe "Cart checkout functionality: " do
 
     it "I can check out and see my order" do
       visit cart_path
+      # to-do: select which address to ship to ***************«»
+      save_and_open_page
       click_button 'Check Out'
       expect(page).to have_content("Your order was created!")
 

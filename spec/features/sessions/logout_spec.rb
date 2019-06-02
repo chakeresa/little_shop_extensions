@@ -48,6 +48,7 @@ RSpec.describe "User logout, " do
 
   it "can log out A MERCHANT who is logged in" do
     merchant = create(:merchant)
+    address = create(:address, user: merchant)
 
     visit login_path
 

@@ -20,6 +20,7 @@ RSpec.describe "As a merchant" do
       @user_4.update(primary_address: @addr_4)
 
       @merchant_1 = create(:merchant)
+      create(:address, user: @merchant_1)
       @item_1 = create(:item, user: @merchant_1, inventory: 20)
       @item_2 = create(:item, user: @merchant_1, inventory: 20)
       @item_3 = create(:item, user: @merchant_1, inventory: 20)
@@ -29,6 +30,7 @@ RSpec.describe "As a merchant" do
       @item_7 = create(:inactive_item, user: @merchant_1)
 
       @merchant_2 = create(:merchant)
+      create(:address, user: @merchant_2)
       @item_8 = create(:item, user: @merchant_2)
 
       #shipped orders

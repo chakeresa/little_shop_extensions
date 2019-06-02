@@ -63,9 +63,11 @@
 <div id="dashboard-show">
   <h1><%= @merchant.name %></h1>
   <p>Email: <%= @merchant.email %></p>
-  <p>Address: <%= @merchant.address %></p>
-  <p><%= @merchant.city %>, <%= @merchant.state %></p>
-  <p>Zip: <%= @merchant.zip %></p>
+  <% if @address %>
+    <p>Address: <%= @address.street %></p>
+    <p><%= @address.city %>, <%= @address.state %></p>
+    <p>Zip: <%= @address.zip %></p>
+  <% end %>
 </div>
 
 <h4>Orders</h4>

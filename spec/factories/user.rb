@@ -10,6 +10,7 @@ FactoryBot.define do
     role { 0 }
     active { true }
   end
+  
   factory :inactive_user, parent: :user do
     sequence(:name) { |n| "Inactive User Name #{n}" }
     sequence(:email) { |n| "inactive_user_#{n}@gmail.com" }

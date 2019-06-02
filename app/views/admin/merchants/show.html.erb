@@ -1,10 +1,12 @@
 <div id="merchant-profile">
   <h1><%= @merchant.name %></h1>
   <p>Email: <%= @merchant.email %></p>
-  <p>Street address: <%= @address.street %></p>
-  <p>City: <%= @address.city %></p>
-  <p>State: <%= @address.state %></p>
-  <p>Zip: <%= @address.zip %></p>
+  <% if @address %>
+    <p>Street address: <%= @address.street %></p>
+    <p>City: <%= @address.city %></p>
+    <p>State: <%= @address.state %></p>
+    <p>Zip: <%= @address.zip %></p>
+  <% end %>
 </div>
 
 <%= button_to "Downgrade Account", admin_downgrade_merchant_path(@merchant), method: "patch" %>

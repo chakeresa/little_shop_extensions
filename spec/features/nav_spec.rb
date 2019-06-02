@@ -66,14 +66,7 @@ RSpec.describe "navigation bar", type: :feature do
 
   context "as a user" do
     before(:each) do
-      @user = User.create!(email:    "abc@def.com",
-                           password: "pw123",
-                           name:     "Abc Def",
-                           address:  "123 Abc St",
-                           city:     "NYC",
-                           state:    "NY",
-                           zip:      "12345"
-                          )
+      @user = create(:user)
     end
 
     it 'has working links' do
@@ -161,15 +154,7 @@ RSpec.describe "navigation bar", type: :feature do
 
   context "as a merchant user" do
     before(:each) do
-      @merchant = User.create!(email:    "abc@def.com",
-                               password: "pw123",
-                               name:     "Abc Def",
-                               address:  "123 Abc St",
-                               city:     "NYC",
-                               state:    "NY",
-                               zip:      "12345",
-                               role:     :merchant
-                              )
+      @merchant = create(:merchant)
     end
 
     it 'has working links' do
@@ -220,15 +205,7 @@ RSpec.describe "navigation bar", type: :feature do
 
   context "as an admin user" do
     before(:each) do
-      @admin = User.create!(email:    "abc@def.com",
-                            password: "pw123",
-                            name:     "Abc Def",
-                            address:  "123 Abc St",
-                            city:     "NYC",
-                            state:    "NY",
-                            zip:      "12345",
-                            role:     :admin
-                           )
+      @admin = create(:admin)
     end
 
     it 'has working links' do

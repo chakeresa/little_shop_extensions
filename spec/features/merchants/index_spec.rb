@@ -30,15 +30,7 @@ RSpec.describe "Merchant Index", type: :feature do
 
   context "as an admin user" do
     before(:each) do
-      @admin = User.create!(email:    "abc@def.com",
-                            password: "pw123",
-                            name:     "Abc Def",
-                            address:  "123 Abc St",
-                            city:     "NYC",
-                            state:    "NY",
-                            zip:      "12345",
-                            role:     :admin
-                           )
+      @admin = create(:admin)
       allow_any_instance_of(ApplicationController).to receive(:current_user)
                                                   .and_return(@admin)
 

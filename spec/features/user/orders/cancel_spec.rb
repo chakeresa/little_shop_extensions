@@ -3,14 +3,7 @@ require 'rails_helper'
 RSpec.describe "Cancelling an order", type: :feature do
   context "as a user" do
     before(:each) do
-      @user = User.create!(email:    "abc@def.com",
-                           password: "pw123",
-                           name:     "Abc Def",
-                           address:  "123 Abc St",
-                           city:     "NYC",
-                           state:    "NY",
-                           zip:      "12345"
-                          )
+      @user = create(:user)
       allow_any_instance_of(ApplicationController).to receive(:current_user)
                                                   .and_return(@user)
 

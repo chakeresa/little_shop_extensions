@@ -49,6 +49,21 @@ RSpec.describe "profile page" do
       expect(page).to_not have_content(@another_address.street)
     end
 
+    it "I can't delete someone else's address" do
+      visit profile_path
+
+      original_addr_id = @address.id
+      another_user = create(:user)
+      @address.update!(user: another_user)
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(status_code).to eq(404)
+      expect(@address.reload.id).to eq(original_addr_id)
+    end
+
     it "has a link to edit my profile data" do
       visit profile_path
 

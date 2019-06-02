@@ -5,6 +5,12 @@
 <p>Status: <%= @order.status %></p>
 <p>Total Items Ordered: <%= @order.total_quantity %></p>
 <p>Total Cost: <%= number_to_currency(@order.grand_total) %></p>
+<br>
+Shipped to:<br>
+<%= @address.nickname.titlecase %>:<br>
+<%= @address.street %><br>
+<%= @address.city %>, <%= @address.state %><br>
+<%= @address.zip %><br>
 
 <% @items.each do |item| %>
   <div id="item-<%= item.id %>">

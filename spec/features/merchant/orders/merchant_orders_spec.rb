@@ -38,6 +38,7 @@ RSpec.describe 'As a merchant: ' do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit merchant_dashboard_path
     end
+    
     it "I see a list of pending orders with only items I sell" do
       expect(page).to have_content("Orders")
 

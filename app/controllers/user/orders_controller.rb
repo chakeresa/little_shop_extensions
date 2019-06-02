@@ -5,6 +5,7 @@ class User::OrdersController < User::BaseController
 
   def show
     @order = Order.find(params[:id])
+    @address = @order.address
     @items = @order.items
   end
 

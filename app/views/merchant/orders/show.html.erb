@@ -1,7 +1,7 @@
 <h1>Order Number: <%= @order.id %></h1>
 <h5>Order Status: <%= @order.status.titleize %></h5>
-<h5>Customer Name: <%= @order.user.name %></h5>
-<h5>Customer Address: <%= @order.user.address %>, <%= @order.user.city %>, <%= @order.user.state %>, <%= @order.user.zip %></h5>
+<h5>Customer Name: <%= @customer.name %></h5>
+<h5>Customer Address: <%= @address.street %>, <%= @address.city %>, <%= @address.state %>, <%= @address.zip %></h5>
 
 <% @order.merchant_items(@merchant).each do |item| %>
   <div id="items-index-<%= item.id %>" class="card mb-3">

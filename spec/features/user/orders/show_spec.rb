@@ -4,9 +4,14 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
   context "as a registered user" do
     before(:each) do
       @user = create(:user)
+      @address = create(:address, user: @user)
+      @another_address = create(:address, user: @user)
+
       @merchant = create(:merchant)
-      @order = create(:order, user: @user)
-      @other_order = create(:order, user: @user)
+      @merchant_address = create(:address, user: @merchant)
+
+      @order = create(:order, user: @user, address: @address)
+      @other_order = create(:order, user: @user, address: @another_address)
       @item_1 = create(:item, user: @merchant)
       @item_2 = create(:item, user: @merchant)
       @item_3 = create(:item, user: @merchant)
@@ -35,6 +40,11 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       expect(page).to have_content("Status: #{@order.status}")
       expect(page).to have_content("Total Items Ordered: #{@oi_1.quantity + @oi_2.quantity}")
       expect(page).to have_content("Total Cost: #{number_to_currency(@order.grand_total)}")
+
+      expect(page).to have_content(@address.nickname.titlecase)
+      expect(page).to have_content(@address.street)
+      expect(page).to have_content("#{@address.city}, #{@address.state}")
+      expect(page).to have_content(@address.zip)
     end
 
     it "shows information for each item in the order" do

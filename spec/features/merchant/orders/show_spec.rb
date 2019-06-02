@@ -5,12 +5,14 @@ RSpec.describe 'As a merchant: ' do
   describe "when I visit an order show page from my dashboard, " do
     before :each do
       @user = create(:user)
-      @order_1 = create(:order, user: @user)
-      @order_4 = create(:order, user: @user)
+      address = create(:address, user: @user)
+      @order_1 = create(:order, user: @user, address: address)
+      @order_4 = create(:order, user: @user, address: address)
 
       @user_2 = create(:user)
-      @order_2 = create(:order, user: @user_2)
-      @order_3 = create(:shipped_order, user: @user_2)
+      address_2 = create(:address, user: @user_2)
+      @order_2 = create(:order, user: @user_2, address: address_2)
+      @order_3 = create(:shipped_order, user: @user_2, address: address_2)
 
       #create an item for another merchant that is part of one of our merchant's orders.
       @other_merchant = create(:merchant)

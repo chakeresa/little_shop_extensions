@@ -6,18 +6,13 @@ RSpec.describe "profile edit page" do
       @email = "abc@def.com"
       @password = "pw123"
       @name = "Abc Def"
-      @address = "123 Abc St"
+      @street = "123 Abc St"
       @city = "New York City"
       @state = "NY"
       @zip = "12345"
-      @user = User.create!(email:    @email,
-                           password: @password,
-                           name:     @name,
-                           address:  @address,
-                           city:     @city,
-                           state:    @state,
-                           zip:      @zip
-                          )
+      @user = User.create!(email: @email, password: @password, name: @name)
+      @address = Address.create!(street: @street, city: @city, state: @state, zip: @zip, user: @user)
+      @user.update!(primary_address: @address)
 
       visit login_path
 
@@ -35,10 +30,10 @@ RSpec.describe "profile edit page" do
       expect(page).to have_field("user[email]")
       expect(page).to have_field("user[password]")
       expect(page).to have_field("user[password_confirmation]")
-      expect(page).to have_field("user[address]")
-      expect(page).to have_field("user[city]")
-      expect(page).to have_field("user[state]")
-      expect(page).to have_field("user[zip]")
+      expect(page).to have_field("user[addresses_attributes][0][street]")
+      expect(page).to have_field("user[addresses_attributes][0][city]")
+      expect(page).to have_field("user[addresses_attributes][0][state]")
+      expect(page).to have_field("user[addresses_attributes][0][zip]")
 
       click_button "Submit Changes"
 
@@ -69,12 +64,12 @@ RSpec.describe "profile edit page" do
 
       new_address = "7264 Blah St"
 
-      fill_in "user[address]", with: new_address
+      fill_in "user[addresses_attributes][0][street]", with: new_address
       click_button "Submit Changes"
 
       expect(page).to have_content("Your profile has been updated")
       expect(page).to have_content(new_address)
-      expect(page).to_not have_content(@address)
+      expect(page).to_not have_content(@street)
     end
 
     it "I can edit my city" do
@@ -82,7 +77,7 @@ RSpec.describe "profile edit page" do
 
       new_city = "New Orleans"
 
-      fill_in "user[city]", with: new_city
+      fill_in "user[addresses_attributes][0][city]", with: new_city
       click_button "Submit Changes"
 
       expect(page).to have_content("Your profile has been updated")
@@ -95,7 +90,7 @@ RSpec.describe "profile edit page" do
 
       new_state = "LA"
 
-      fill_in "user[state]", with: new_state
+      fill_in "user[addresses_attributes][0][state]", with: new_state
       click_button "Submit Changes"
 
       expect(page).to have_content("Your profile has been updated")
@@ -109,7 +104,7 @@ RSpec.describe "profile edit page" do
       new_zip = "83649"
       original_pw_digest = @user.password_digest
 
-      fill_in "user[zip]", with: new_zip
+      fill_in "user[addresses_attributes][0][zip]", with: new_zip
       click_button "Submit Changes"
 
       expect(page).to have_content(new_zip)
@@ -117,7 +112,7 @@ RSpec.describe "profile edit page" do
 
       expect(page).to have_content("Your profile has been updated")
       @user.reload
-      expect(@user.zip).to eq(new_zip)
+      expect(@user.addresses[0].zip).to eq(new_zip)
       expect(@user.password_digest).to eq(original_pw_digest)
     end
 

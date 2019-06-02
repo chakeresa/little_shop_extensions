@@ -1,6 +1,7 @@
 class User::UsersController < User::BaseController
   def show
     @user_orders = current_user.orders
+    @addresses = current_user.addresses
   end
 
   def edit
@@ -20,7 +21,7 @@ class User::UsersController < User::BaseController
   private
 
   def update_params
-    params.require(:user).permit(:name, :email, :address, :city, :state, :zip, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, {addresses_attributes: ["id", "street", "city", "state", "zip"]})
   end
 
   def attempt_update

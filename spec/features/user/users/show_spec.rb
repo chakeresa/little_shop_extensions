@@ -4,8 +4,9 @@ RSpec.describe "profile page" do
   context "as a user" do
     before(:each) do
       @user = User.create!(email: "abc@def.com", password: "pw123", name: "Abc Def")
-      @address = Address.create!(street: "123 Abc St", city: "NYC", state: "NY", zip: "12345", user: @user)
-      @another_address = Address.create!(street: "Blah Ln", city: "Denver", state: "CO", zip: "80221", user: @user)
+      @address = Address.create!(nickname: "work", street: "123 Abc St", city: "NYC", state: "NY", zip: "12345", user: @user)
+      @another_address = Address.create!(nickname: "home", street: "Blah Ln", city: "Denver", state: "CO", zip: "80221", user: @user)
+      @user.update(primary_address_id: @address.id)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user)
         .and_return(@user)
@@ -16,12 +17,21 @@ RSpec.describe "profile page" do
 
       expect(page).to have_content(@user.name)
       expect(page).to have_content(@user.email)
-      expect(page).to have_content(@address.street)
-      expect(page).to have_content("#{@address.city}, #{@address.state}")
-      expect(page).to have_content(@address.zip)
-      expect(page).to have_content(@another_address.street)
-      expect(page).to have_content("#{@another_address.city}, #{@another_address.state}")
-      expect(page).to have_content(@another_address.zip)
+
+      within("#address-#{@address.id}") do
+        expect(page).to have_content("#{@address.nickname} (primary address)")
+        expect(page).to have_content(@address.street)
+        expect(page).to have_content("#{@address.city}, #{@address.state}")
+        expect(page).to have_content(@address.zip)
+      end
+
+      within("#address-#{@another_address.id}") do
+        expect(page).to_not have_content("(primary address)")
+        expect(page).to have_content(@another_address.nickname)
+        expect(page).to have_content(@another_address.street)
+        expect(page).to have_content("#{@another_address.city}, #{@another_address.state}")
+        expect(page).to have_content(@another_address.zip)
+      end
     end
 
     it "has a link to edit my profile data" do

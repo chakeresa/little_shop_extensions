@@ -2,6 +2,7 @@
 <p><%= current_user.email %></p>
 <% @addresses.each do |address| %>
   <div id="address-<%= address.id %>">
+    <h5><%= address.nickname %><%= " (primary address)" if address.id == current_user.primary_address_id %></h5>
     <p><%= address.street %></p>
     <p><%= address.city %>, <%= address.state %></p>
     <p><%= address.zip %></p>

@@ -13,4 +13,15 @@ RSpec.describe Address, type: :model do
     it {should belong_to :user}
     it {should have_many :orders}
   end
+
+  describe "instance methods" do
+    it "#no_orders? returns true if the address has no associated orders" do
+      address_1 = create(:address)
+      address_2 = create(:address)
+      order = create(:order, address: address_1)
+
+      expect(address_1.no_orders?).to eq(false)
+      expect(address_2.no_orders?).to eq(true)
+    end
+  end
 end

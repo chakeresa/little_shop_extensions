@@ -7,4 +7,8 @@ class Address < ApplicationRecord
                         :city,
                         :state,
                         :zip
+
+  def no_orders?
+    Order.where(address_id: id).count == 0
+  end
 end

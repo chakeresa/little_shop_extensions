@@ -6,6 +6,8 @@ RSpec.describe "as an admin user", type: :feature do
       @admin = create(:admin)
       @user = create(:user)
       @merchant = create(:merchant)
+      @address = create(:address, user: @merchant)
+      @merchant.update!(primary_address_id: @address.id)
 
       @order = create(:order, user: @user)
       @item = create(:item, user: @merchant, price: 2.00)
@@ -24,10 +26,10 @@ RSpec.describe "as an admin user", type: :feature do
       within "#merchant-profile" do
         expect(page).to have_content(@merchant.name)
         expect(page).to have_content(@merchant.email)
-        expect(page).to have_content(@merchant.address)
-        expect(page).to have_content(@merchant.city)
-        expect(page).to have_content(@merchant.state)
-        expect(page).to have_content(@merchant.zip)
+        expect(page).to have_content(@merchant.primary_address.street)
+        expect(page).to have_content(@merchant.primary_address.city)
+        expect(page).to have_content(@merchant.primary_address.state)
+        expect(page).to have_content(@merchant.primary_address.zip)
       end
 
       within "#pending-merchant-orders-#{@order.id}" do
@@ -38,13 +40,13 @@ RSpec.describe "as an admin user", type: :feature do
       end
     end
 
-    it "when i visit a user's merchant page i'm redirected to the user profile page" do
+    it "when I visit a user's merchant page I'm redirected to the user profile page" do
       visit admin_merchant_path(@user)
 
       expect(current_path).to eq(admin_user_path(@user))
     end
 
-    it "when i visit a merchant's user page i'm redirected to the merchant page" do
+    it "when I visit a merchant's user page I'm redirected to the merchant page" do
       visit admin_user_path(@merchant)
 
       expect(current_path).to eq(admin_merchant_path(@merchant))

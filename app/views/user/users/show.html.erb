@@ -1,13 +1,17 @@
 <h1><%= current_user.name %></h1>
 <p><%= current_user.email %></p>
 <% @addresses.each do |address| %>
-  <div id="address-<%= address.id %>">
-    <h5><%= address.nickname %><%= " (primary address)" if address.id == current_user.primary_address_id %></h5>
-    <p><%= address.street %></p>
-    <p><%= address.city %>, <%= address.state %></p>
-    <p><%= address.zip %></p>
-    <br>
-    <%= button_to "Delete Address", delete_address_path(address), method: "delete", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
+  <div id="address-<%= address.id %>" class="card mb-3">
+    <div class="row no-gutters col-md-9 card-body">
+      <h5 class="card-title"><%= address.nickname %><%= " (primary address)" if address.id == current_user.primary_address_id %></h5>
+      <ul>
+        <li><%= address.street %></li>
+        <li><%= address.city %>, <%= address.state %></li>
+        <li><%= address.zip %></li>
+      </ul>
+      <br>
+      <%= button_to "Delete Address", delete_address_path(address), method: "delete", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
+    </div>
   </div>
 <% end %>
 <br>

@@ -38,11 +38,13 @@
         { selected: current_user.primary_address_id }
         ) %>
         <%= link_to "Add a New Address", new_user_address_path, class: "btn btn-primary" %>
-        <%= submit_tag("Check Out") %>
+        <br><br>
+        <%= submit_tag("Check Out", class: "btn btn-primary") %>
       <% end %>
     <% end %>
   <% end %>
-  <%= button_to "Empty Cart", { controller: :carts, action: :destroy }, method: :delete %>
+  <br>
+  <%= button_to "Empty Cart", { controller: :carts, action: :destroy }, method: :delete, class: "btn btn-primary" %>
 <% else %>
   <h1>There is nothing in your cart!</h1>
 <% end %>

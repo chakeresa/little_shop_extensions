@@ -6,20 +6,24 @@
 <p>Total Items Ordered: <%= @order.total_quantity %></p>
 <p>Total Cost: <%= number_to_currency(@order.grand_total) %></p>
 <br>
-Shipped to:<br>
-<%= @address.nickname.titlecase %>:<br>
-<%= @address.street %><br>
-<%= @address.city %>, <%= @address.state %><br>
-<%= @address.zip %><br>
+<h5>Shipping to <%= @address.nickname %> address:</h5>
+<p><%= @address.street %></p>
+<p><%= @address.city %>, <%= @address.state %></p>
+<p><%= @address.zip %></p>
 
+<h5>Items Ordered:</h5>
 <% @items.each do |item| %>
-  <div id="item-<%= item.id %>">
-    <h3><%= link_to item.name, item_path(item) %></h3>
-    <p><%= item.description %></p>
-    <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}" %>
-    <p>Price: <%= number_to_currency(@order.item_price(item)) %> each</p>
-    <p>Quantity: <%= @order.item_quantity(item) %></p>
-    <p>Subtotal: <%= number_to_currency(@order.item_subtotal(item)) %> each</p>
+  <div id="item-<%= item.id %>" class="card mb-3">
+    <div class="row no-gutters">
+      <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
+      <div class="col-md-9 card-body">
+        <h5 class="card-title"><%= link_to item.name, item_path(item) %></h5>
+        <p class="card-text">Price: <%= number_to_currency(@order.item_price(item)) %> each</p>
+        <p class="card-text"><%= item.description %></p>
+        <p class="card-text">Quantity: <%= @order.item_quantity(item) %></p>
+        <p class="card-text">Subtotal: <%= number_to_currency(@order.item_subtotal(item)) %></p>
+      </div>
+    </div>
   </div>
 <% end %>
 

@@ -10,8 +10,10 @@
     <%= button_to "Delete Address", delete_address_path(address), method: "delete", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
   </div>
 <% end %>
-
-<%= link_to "Edit My Profile or Password", profile_edit_path %>
+<br>
+<%= link_to "Add a New Address", new_user_address_path, class: "btn btn-primary" %>
+<br>
+<%= link_to "Edit My Profile or Password", profile_edit_path, class: "btn btn-primary" %>
 
 <% if @user_orders.any? %>
   <p><%= link_to "My Orders", user_orders_path %></p>

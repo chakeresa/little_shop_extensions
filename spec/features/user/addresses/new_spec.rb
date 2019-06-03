@@ -41,7 +41,7 @@ RSpec.describe "Adding a new address" do
       expect(current_path).to eq(new_user_address_path)
     end
 
-    xit "I can add an address from the profile page" do
+    it "I can add an address from the profile page" do
       user_1 = create(:user)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user_1)
 

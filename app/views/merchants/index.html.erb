@@ -72,7 +72,9 @@
         <% end %>
       </h3>
       <ul>
-        <li>Location: <%= merchant.city %>, <%= merchant.state %>.</li>
+        <% if merchant.addresses.first %>
+          <li>Location: <%= merchant.addresses.first.city %>, <%= merchant.addresses.first.state %>.</li>
+        <% end %>
         <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
       </ul>
       <% if current_admin? %>
@@ -95,7 +97,9 @@
           <% end %>
         </h3>
         <ul>
-          <li>Location: <%= merchant.city %>, <%= merchant.state %>.</li>
+          <% if merchant.addresses.first %>
+            <li>Location: <%= merchant.addresses.first.city %>, <%= merchant.addresses.first.state %>.</li>
+          <% end %>
           <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
         </ul>
         <%= button_to "Enable Merchant", admin_enable_merchant_path(merchant), method: "patch", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>

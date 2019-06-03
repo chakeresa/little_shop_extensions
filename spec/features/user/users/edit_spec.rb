@@ -41,9 +41,9 @@ RSpec.describe "profile edit page" do
 
       expect(page).to have_content(@user.name)
       expect(page).to have_content(@user.email)
-      expect(page).to have_content(@user.address)
-      expect(page).to have_content("#{@user.city}, #{@user.state}")
-      expect(page).to have_content(@user.zip)
+      expect(page).to have_content(@address.street)
+      expect(page).to have_content("#{@address.city}, #{@address.state}")
+      expect(page).to have_content(@address.zip)
     end
 
     it "I can edit my name" do

@@ -6,10 +6,10 @@
       <h5 class="card-title"><%= link_to merchant.name, admin_merchant_path(merchant) %></h5>
       <ul>
         <li>Email: <%= merchant.email %></li>
-        <li>Street address: <%= merchant.address %></li>
-        <li>City: <%= merchant.city %></li>
-        <li>State: <%= merchant.state %></li>
-        <li>Zip code: <%= merchant.zip %></li>
+        <li>Street address: <%= merchant.addresses.first.street %></li>
+        <li>City: <%= merchant.addresses.first.city %></li>
+        <li>State: <%= merchant.addresses.first.state %></li>
+        <li>Zip code: <%= merchant.addresses.first.zip %></li>
         <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
         <li>
           <% if merchant.active? %>

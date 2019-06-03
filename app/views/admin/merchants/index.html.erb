@@ -1,19 +1,24 @@
 <h1>All Merchants</h1>
 
 <% @merchants.each do |merchant| %>
-  <div id="merchant-id-<%= merchant.id %>">
-    <h2>Name: <%= link_to merchant.name, admin_merchant_path(merchant) %></h2>
-    <p>Email: <%= merchant.email %></p>
-    <p>Street address: <%= merchant.address %></p>
-    <p>City: <%= merchant.city %></p>
-    <p>State: <%= merchant.state %></p>
-    <p>Zip code: <%= merchant.zip %></p>
-    <p>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></p>
-
-    <% if merchant.active? %>
-      <%= button_to "Disable Merchant", admin_disable_merchant_path(merchant), method: "patch" %>
-    <% else %>
-      <%= button_to "Enable Merchant", admin_enable_merchant_path(merchant), method: "patch"  %>
-    <% end %>
+  <div id="merchant-id-<%= merchant.id %>" class="card mb-3">
+    <div class="row no-gutters col-md-9 card-body">
+      <h5 class="card-title"><%= link_to merchant.name, admin_merchant_path(merchant) %></h5>
+      <ul>
+        <li>Email: <%= merchant.email %></li>
+        <li>Street address: <%= merchant.address %></li>
+        <li>City: <%= merchant.city %></li>
+        <li>State: <%= merchant.state %></li>
+        <li>Zip code: <%= merchant.zip %></li>
+        <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
+        <li>
+          <% if merchant.active? %>
+            <%= button_to "Disable Merchant", admin_disable_merchant_path(merchant), method: "patch", class: "btn btn-primary" %>
+          <% else %>
+            <%= button_to "Enable Merchant", admin_enable_merchant_path(merchant), method: "patch", class: "btn btn-primary" %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
   </div>
 <% end %>

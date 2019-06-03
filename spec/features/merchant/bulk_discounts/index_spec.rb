@@ -34,7 +34,7 @@ RSpec.describe 'Merchant Bulk Discounts Index' do
         expect(page).to have_content(number_to_percentage(discount_2.pc_off, precision: 2))
       end
 
-      expect(page).to_not have_content(discount_3.bulk_quantity)
+      expect(page).to_not have_content("when a user purchases at least #{discount_3.bulk_quantity}")
     end
 
     it "has links to edit my bulk discounts" do

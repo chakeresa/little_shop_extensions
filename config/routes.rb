@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     patch '/order_items/:id/fulfill', to: 'order_items#fulfill', as: :fulfill_item
     resources :orders, only: :show
 
-    resources :bulk_discounts, only: [:index, :new, :edit, :destroy]
+    resources :bulk_discounts, only: [:index, :new, :create, :edit, :destroy]
   end
 
   # ADMIN ROUTES

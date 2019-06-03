@@ -4,6 +4,18 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
   end
 
   def new
+    @bulk_discount = BulkDiscount.new
+  end
+
+  def create
+    bulk_discount = BulkDiscount.new(bulk_discount_params)
+    if bulk_discount.save
+      flash[:success] = "A new bulk discount was added"
+      redirect_to merchant_bulk_discounts_path
+    else
+      flash[:danger] = bulk_discount.errors.full_messages.join(". ")
+      render :new
+    end
   end
 
   def edit
@@ -17,5 +29,12 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     else
       render file: "/public/404", status: 404
     end
+  end
+
+  private
+
+  def bulk_discount_params
+    params[:bulk_discount][:user_id] = current_user.id
+    params.require(:bulk_discount).permit(:bulk_quantity, :pc_off, :user_id)
   end
 end

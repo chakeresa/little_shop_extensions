@@ -6,7 +6,23 @@ class User::OrdersController < User::BaseController
   def show
     @order = Order.find(params[:id])
     @address = @order.address
+    @addresses = current_user.addresses
     @items = @order.items
+  end
+
+  def update
+    @order = Order.find(params[:id])
+    if @order.user_id == current_user.id
+      if @order.status == "pending"
+        @order.update(address_id: params[:order][:address_id])
+        flash[:success] = "Shipping address succcessfully changed"
+      else
+        flash[:danger] = "Shipping address can only be changed for pending orders"
+      end
+      redirect_to user_order_path(@order)
+    else
+      render file: "/public/404", status: 404
+    end
   end
 
   def cancel

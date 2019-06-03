@@ -10,6 +10,18 @@
 <p><%= @address.street %></p>
 <p><%= @address.city %>, <%= @address.state %></p>
 <p><%= @address.zip %></p>
+<h6>or change address...</h6>
+<%= form_tag(user_order_path(@order), method: "patch") do %>
+  <%= collection_select(
+    :order,
+    :address_id,
+    @addresses,
+    :id,
+    :street,
+    { selected: current_user.primary_address_id }
+  ) %>
+  <%= submit_tag("Change Shipping Address", class: "btn btn-primary") %>
+<% end %>
 <br>
 <h5>Items Ordered:</h5>
 <% @items.each do |item| %>

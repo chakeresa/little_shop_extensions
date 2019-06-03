@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
 
   scope :profile, module: :user, as: :user do
-    resources :orders, only: [:index, :show]
+    resources :orders, only: [:index, :show, :update]
     patch '/orders/:id/cancel', to: 'orders#cancel', as: :cancel_order
   end
 

@@ -70,5 +70,23 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
 
       expect(page).to_not have_content(@item_2.name)
     end
+
+    it "allows me to change the address for a pending order" do
+      visit user_order_path(@order)
+
+      find('#order_address_id').select(@another_address.street)
+      click_button 'Change Shipping Address'
+
+      expect(page).to have_content("Shipping address succcessfully changed")
+      expect(page).to have_content(@another_address.nickname.titlecase)
+      expect(page).to have_content(@another_address.street)
+      expect(page).to have_content("#{@another_address.city}, #{@another_address.state}")
+      expect(page).to have_content(@another_address.zip)
+    end
+
+    xit "does not allow me to change the address for a packaged order"
+    xit "does not allow me to change the address for a shipped order"
+    xit "does not allow me to change the address for a cancelled order"
+    xit "does not allow me to change the address for a different user's pending order"
   end
 end

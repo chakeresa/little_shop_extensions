@@ -21,9 +21,7 @@ class User::AddressesController < User::BaseController
     if address.user_id == current_user.id
       if address.no_completed_orders?
         nickname = address.nickname
-        address.user.update(primary_address_id: nil)
-        address.orders.clear
-        address.destroy
+        address.delete_addr_and_associations
         flash[:success] = "#{nickname.titlecase} address has been deleted"
         redirect_to profile_path
         return

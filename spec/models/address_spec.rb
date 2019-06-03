@@ -35,5 +35,22 @@ RSpec.describe Address, type: :model do
       shipped_order = create(:shipped_order, address: address_5)
       expect(address_5.no_completed_orders?).to eq(false)
     end
+
+    it "#delete_addr_and_associations deletes an address and it's presence as a foreign key in any orders and user primary_address" do
+      user = create(:user)
+      address = create(:address, user: user)
+      user.update(primary_address_id: address.id)
+      order = create(:shipped_order, user: user, address: address)
+
+      address.delete_addr_and_associations
+
+      user.reload
+      order.reload
+
+      expect(user.primary_address_id).to eq(nil)
+      expect(user.addresses.count).to eq(0)
+      expect(Address.count).to eq(0)
+      expect(order.address_id).to eq(nil)
+    end
   end
 end

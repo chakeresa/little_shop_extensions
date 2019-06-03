@@ -1,1 +1,8 @@
+<h1>All Bulk Discounts:</h1>
+<% @bulk_discounts.each do |bulk_discount| %>
+  <div id="bulk-discount-<%= bulk_discount.id %>">
+    <p><%= number_to_percentage(bulk_discount.pc_off, precision: 2) %> off when a user purchases at least <%= bulk_discount.bulk_quantity %> of an item</p>
+  </div>
+<% end %>
+<br>
 <%= link_to "Add a New Bulk Discount", new_merchant_bulk_discount_path %>

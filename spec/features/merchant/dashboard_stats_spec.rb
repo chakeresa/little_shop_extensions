@@ -76,11 +76,11 @@ RSpec.describe "As a merchant" do
       visit merchant_dashboard_path
 
       within "#stats-top-five" do
-        expect(page.all('li')[0]).to have_content("Item: #{@item_2.name}, Quantity: #{@merchant_1.top_five_items[0].total_sold}")
-        expect(page.all('li')[1]).to have_content("Item: #{@item_5.name}, Quantity: #{@merchant_1.top_five_items[1].total_sold}")
-        expect(page.all('li')[2]).to have_content("Item: #{@item_3.name}, Quantity: #{@merchant_1.top_five_items[2].total_sold}")
-        expect(page.all('li')[3]).to have_content("Item: #{@item_4.name}, Quantity: #{@merchant_1.top_five_items[3].total_sold}")
-        expect(page.all('li')[4]).to have_content("Item: #{@item_6.name}, Quantity: #{@merchant_1.top_five_items[4].total_sold}")
+        expect(page.all('li')[0]).to have_content("#{@item_2.name}, Quantity: #{@merchant_1.top_five_items[0].total_sold}")
+        expect(page.all('li')[1]).to have_content("#{@item_5.name}, Quantity: #{@merchant_1.top_five_items[1].total_sold}")
+        expect(page.all('li')[2]).to have_content("#{@item_3.name}, Quantity: #{@merchant_1.top_five_items[2].total_sold}")
+        expect(page.all('li')[3]).to have_content("#{@item_4.name}, Quantity: #{@merchant_1.top_five_items[3].total_sold}")
+        expect(page.all('li')[4]).to have_content("#{@item_6.name}, Quantity: #{@merchant_1.top_five_items[4].total_sold}")
       end
     end
 
@@ -100,9 +100,9 @@ RSpec.describe "As a merchant" do
       quantities = [19, 12, 7]
 
       within ".top-3-states" do
-        expect(page.all('li')[0]).to have_content("State: #{states[0]} Quantity: #{quantities[0]}")
-        expect(page.all('li')[1]).to have_content("State: #{states[1]} Quantity: #{quantities[1]}")
-        expect(page.all('li')[2]).to have_content("State: #{states[2]} Quantity: #{quantities[2]}")
+        expect(page.all('li')[0]).to have_content("#{states[0]}, Quantity: #{quantities[0]}")
+        expect(page.all('li')[1]).to have_content("#{states[1]}, Quantity: #{quantities[1]}")
+        expect(page.all('li')[2]).to have_content("#{states[2]}, Quantity: #{quantities[2]}")
       end
     end
 
@@ -116,9 +116,9 @@ RSpec.describe "As a merchant" do
       quantities = [12, 10, 9]
 
       within ".top-3-cities" do
-        expect(page.all('li')[0]).to have_content("City: #{cities[0]}, #{states[0]} Quantity: #{quantities[0]}")
-        expect(page.all('li')[1]).to have_content("City: #{cities[1]}, #{states[1]} Quantity: #{quantities[1]}")
-        expect(page.all('li')[2]).to have_content("City: #{cities[2]}, #{states[2]} Quantity: #{quantities[2]}")
+        expect(page.all('li')[0]).to have_content("#{cities[0]}, #{states[0]}, Quantity: #{quantities[0]}")
+        expect(page.all('li')[1]).to have_content("#{cities[1]}, #{states[1]}, Quantity: #{quantities[1]}")
+        expect(page.all('li')[2]).to have_content("#{cities[2]}, #{states[2]}, Quantity: #{quantities[2]}")
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.describe "As a merchant" do
       visit merchant_dashboard_path
 
       within ".top-user-with-most-orders" do
-        expect(page).to have_content("User: #{@user_3.name} Count: 2")
+        expect(page).to have_content("#{@user_3.name}, Order Count: 2")
       end
     end
 
@@ -138,7 +138,7 @@ RSpec.describe "As a merchant" do
       visit merchant_dashboard_path
 
       within ".top-user-with-most-items" do
-        expect(page).to have_content("User: #{@user_3.name} Count: 12")
+        expect(page).to have_content("#{@user_3.name}, Item Count: 12")
       end
     end
 
@@ -148,9 +148,9 @@ RSpec.describe "As a merchant" do
       visit merchant_dashboard_path
 
       within ".top-user-with-most-money" do
-        expect(page.all('li')[0]).to have_content("User: #{@user_3.name}, Total Money Spent: 1200")
-        expect(page.all('li')[1]).to have_content("User: #{@user_1.name}, Total Money Spent: 1000")
-        expect(page.all('li')[2]).to have_content("User: #{@user_4.name}, Total Money Spent: 900")
+        expect(page.all('li')[0]).to have_content("#{@user_3.name}, Total Money Spent: #{number_to_currency(1200)}")
+        expect(page.all('li')[1]).to have_content("#{@user_1.name}, Total Money Spent: #{number_to_currency(1000)}")
+        expect(page.all('li')[2]).to have_content("#{@user_4.name}, Total Money Spent: #{number_to_currency(900)}")
       end
     end
   end

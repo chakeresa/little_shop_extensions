@@ -122,7 +122,17 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       expect(page).to have_content(@address.nickname.titlecase)
       expect(page).to have_content(@address.street)
     end
-    
-    xit "does not allow me to change the address for a different user's pending order"
+
+    it "does not allow me to change the address for a different user's pending order" do
+      visit user_order_path(@order)
+
+      @order.update(user: create(:user))
+
+      find('#order_address_id').select(@another_address.street)
+      click_button 'Change Shipping Address'
+
+      expect(status_code).to eq(404)
+      expect(@order.reload.address_id).to eq(@address.id)
+    end
   end
 end

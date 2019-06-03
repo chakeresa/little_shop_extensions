@@ -9,7 +9,7 @@ class Address < ApplicationRecord
                         :zip
 
   def no_completed_orders?
-    Order.where(address_id: id).where(status: ["shipped", "packaged"]).count == 0
+    orders.where(status: ["shipped", "packaged"]).count == 0
   end
 
   def delete_addr_and_associations

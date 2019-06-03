@@ -5,10 +5,9 @@ class User::AddressesController < User::BaseController
   end
 
   def create
-    require "pry"; binding.pry
     @address = Address.new(address_params)
     if @address.save
-      flash[:success] = "Added #{@address.nickname} address"
+      flash[:success] = "Added \"#{@address.nickname}\" address"
       redirect_to profile_path
     else
       flash[:danger] = @address.errors.full_messages.join(". ")
@@ -36,6 +35,7 @@ class User::AddressesController < User::BaseController
   private
 
   def address_params
+    params[:address][:user_id] = current_user.id
     params.require(:address).permit(:nickname, :street, :city, :state, :zip, :user_id)
   end
 end

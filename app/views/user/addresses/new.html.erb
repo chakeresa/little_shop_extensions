@@ -3,16 +3,16 @@
   <%= f.text_field :nickname %>
   <br>
   <%= f.label :street %>
-  <%= f.text_field :street %>
+  <%= f.text_field :street, required: true %>
   <br>
   <%= f.label :city %>
-  <%= f.text_field :city %>
+  <%= f.text_field :city, required: true %>
   <br>
   <%= f.label :state %>
-  <%= f.text_field :state %>
+  <%= f.text_field :state, required: true %>
   <br>
   <%= f.label :zip %>
-  <%= f.text_field :zip %>
+  <%= f.text_field :zip, required: true %>
   <br>
   <%= f.submit "Add Address" %>
 <% end %>

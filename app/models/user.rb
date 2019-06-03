@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :items
   has_one :primary_address, class_name: 'Address'
 
-  has_many :addresses
+  has_many :addresses, dependent: :destroy
   accepts_nested_attributes_for :addresses
 
   enum role: ['user', 'merchant', 'admin']

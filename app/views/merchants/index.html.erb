@@ -76,10 +76,10 @@
           <li>Location: <%= merchant.addresses.first.city %>, <%= merchant.addresses.first.state %>.</li>
         <% end %>
         <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
+        <% if current_admin? %>
+          <li><%= button_to "Disable Merchant", admin_disable_merchant_path(merchant), method: "patch", class: "btn btn-primary", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %></li>
+        <% end %>
       </ul>
-      <% if current_admin? %>
-        <%= button_to "Disable Merchant", admin_disable_merchant_path(merchant), method: "patch", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
-      <% end %>
     </div>
   </div>
 <% end %>
@@ -101,8 +101,8 @@
             <li>Location: <%= merchant.addresses.first.city %>, <%= merchant.addresses.first.state %>.</li>
           <% end %>
           <li>Account Created: <%= Date.strptime(merchant.created_at.to_s) %></li>
+          <li><%= button_to "Enable Merchant", admin_enable_merchant_path(merchant), method: "patch", class: "btn btn-primary", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %></li>
         </ul>
-        <%= button_to "Enable Merchant", admin_enable_merchant_path(merchant), method: "patch", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
       </div>
     </div>
   <% end %>

@@ -1,0 +1,10 @@
+<h1>Edit Bulk Discount</h1>
+<%= form_for @bulk_discount, url: merchant_bulk_discount_path(@bulk_discount) do |f| %>
+  <%= f.label :bulk_quantity, "Item quantity to qualify for discount" %>
+  <%= f.number_field :bulk_quantity, min: 2 %>
+  <br>
+  <%= f.label :pc_off, "Percent off (enter 50 for 50% off)" %>
+  <%= f.number_field :pc_off, min: 0.01, step: 0.01 %>
+  <br>
+  <%= f.submit "Update Bulk Discount" %>
+<% end %>

@@ -36,5 +36,22 @@ RSpec.describe 'Merchant Bulk Discounts Index' do
 
       expect(page).to_not have_content(discount_3.bulk_quantity)
     end
+
+    it "has links to edit my bulk discounts" do
+      discount_1 = create(:bulk_discount, user: @merchant)
+      discount_2 = create(:bulk_discount, user: @merchant)
+
+      visit merchant_bulk_discounts_path
+
+      within("#bulk-discount-#{discount_1.id}") do
+        expect(page).to have_link("Edit Discount")
+      end
+
+      within("#bulk-discount-#{discount_2.id}") do
+        click_link "Edit Discount"
+      end
+
+      expect(current_path).to eq(edit_merchant_bulk_discount_path(discount_2))
+    end
   end
 end

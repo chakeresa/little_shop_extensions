@@ -113,7 +113,7 @@ RSpec.describe "profile page" do
       end
 
       expect(current_path).to eq(profile_path)
-      expect(page).to have_content("Cannot delete an address that was used for a packaged order")
+      expect(page).to have_content("Cannot delete an address that was used for packaged/shipped order(s)")
       expect(@address.reload.id).to eq(original_addr_id)
     end
 
@@ -128,7 +128,7 @@ RSpec.describe "profile page" do
       end
 
       expect(current_path).to eq(profile_path)
-      expect(page).to have_content("Cannot delete an address that was used for a shipped order")
+      expect(page).to have_content("Cannot delete an address that was used for packaged/shipped order(s)")
       expect(@address.reload.id).to eq(original_addr_id)
     end
 

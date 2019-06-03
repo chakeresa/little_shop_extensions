@@ -8,7 +8,7 @@ class Address < ApplicationRecord
                         :state,
                         :zip
 
-  def no_orders?
-    Order.where(address_id: id).count == 0
+  def no_completed_orders?
+    Order.where(address_id: id).where(status: ["shipped", "packaged"]).count == 0
   end
 end

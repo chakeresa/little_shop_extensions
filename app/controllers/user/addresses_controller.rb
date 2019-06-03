@@ -19,12 +19,14 @@ class User::AddressesController < User::BaseController
   def destroy
     address = Address.find(params[:id])
     if address.user_id == current_user.id
-      if address.no_orders?
-        Address.destroy(address.id)
+      if address.no_completed_orders?
+        nickname = address.nickname
+        address.delete_addr_and_associations
+        flash[:success] = "#{nickname.titlecase} address has been deleted"
         redirect_to profile_path
         return
       else
-        flash[:danger] = "Cannot delete an address that was used for an order"
+        flash[:danger] = "Cannot delete an address that was used for packaged/shipped order(s)"
         redirect_back fallback_location: profile_path
       end
     else

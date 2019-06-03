@@ -37,6 +37,9 @@ RSpec.describe "profile page" do
     it "has buttons to delete my addresses" do
       visit profile_path
 
+      original_street = @another_address.street
+      original_nickname = @another_address.nickname
+
       within("#address-#{@address.id}") do
         expect(page).to have_button("Delete Address")
       end
@@ -46,7 +49,8 @@ RSpec.describe "profile page" do
       end
 
       expect(current_path).to eq(profile_path)
-      expect(page).to_not have_content(@another_address.street)
+      expect(page).to_not have_content(original_street)
+      expect(page).to have_content("#{original_nickname.titlecase} address has been deleted")
     end
 
     it "I can't delete someone else's address" do
@@ -64,8 +68,42 @@ RSpec.describe "profile page" do
       expect(@address.reload.id).to eq(original_addr_id)
     end
 
-    it "I can't delete an address with associated orders" do
-      order = create(:order, address: @address)
+    it "I can delete an address with associated pending orders" do
+      order = create(:order, address: @address) # pending order
+      original_addr_id = @address.id
+      original_addr_nickname = @address.nickname
+      original_addr_street = @address.street
+
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("#{original_addr_nickname.titlecase} address has been deleted")
+      expect(page).to_not have_content(original_addr_street)
+    end
+
+    it "I can delete an address with associated cancelled orders" do
+      order = create(:cancelled_order, address: @address)
+      original_addr_id = @address.id
+      original_addr_nickname = @address.nickname
+      original_addr_street = @address.street
+
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("#{original_addr_nickname.titlecase} address has been deleted")
+      expect(page).to_not have_content(original_addr_street)
+    end
+
+    it "I can't delete an address with associated packaged orders" do
+      order = create(:packaged_order, address: @address)
       original_addr_id = @address.id
 
       visit profile_path
@@ -75,7 +113,22 @@ RSpec.describe "profile page" do
       end
 
       expect(current_path).to eq(profile_path)
-      expect(page).to have_content("Cannot delete an address that was used for an order")
+      expect(page).to have_content("Cannot delete an address that was used for packaged/shipped order(s)")
+      expect(@address.reload.id).to eq(original_addr_id)
+    end
+
+    it "I can't delete an address with associated shipped orders" do
+      order = create(:shipped_order, address: @address)
+      original_addr_id = @address.id
+
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("Cannot delete an address that was used for packaged/shipped order(s)")
       expect(@address.reload.id).to eq(original_addr_id)
     end
 

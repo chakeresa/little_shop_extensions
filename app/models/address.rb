@@ -8,7 +8,13 @@ class Address < ApplicationRecord
                         :state,
                         :zip
 
-  def no_orders?
-    Order.where(address_id: id).count == 0
+  def no_completed_orders?
+    orders.where(status: ["shipped", "packaged"]).count == 0
+  end
+
+  def delete_addr_and_associations
+    user.update(primary_address_id: nil)
+    orders.clear
+    destroy
   end
 end

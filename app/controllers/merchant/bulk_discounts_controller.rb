@@ -24,12 +24,16 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
 
   def update
     @bulk_discount = BulkDiscount.find(params[:id])
-    if @bulk_discount.update(bulk_discount_params)
-      flash[:success] = "The bulk discount was updated"
-      redirect_to merchant_bulk_discounts_path
+    if current_user.id == @bulk_discount.user_id
+      if @bulk_discount.update(bulk_discount_params)
+        flash[:success] = "The bulk discount was updated"
+        redirect_to merchant_bulk_discounts_path
+      else
+        flash[:danger] = @bulk_discount.errors.full_messages.join(". ")
+        render :edit
+      end
     else
-      flash[:danger] = @bulk_discount.errors.full_messages.join(". ")
-      render :edit
+      render file: "/public/404", status: 404
     end
   end
 

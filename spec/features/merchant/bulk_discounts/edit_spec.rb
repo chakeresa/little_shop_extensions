@@ -31,6 +31,21 @@ RSpec.describe 'Bulk Discount Edit Form' do
       expect(@bulk_discount.reload.pc_off).to eq(@pc_off)
     end
 
+    it "I cannot edit another merchant's bulk discount" do
+      visit edit_merchant_bulk_discount_path(@bulk_discount)
+
+      @bulk_discount.update!(user: create(:merchant))
+
+      fill_in "bulk_discount[bulk_quantity]", with: @bulk_quantity
+      fill_in "bulk_discount[pc_off]", with: @pc_off
+
+      click_button "Update Bulk Discount"
+
+      expect(status_code).to eq(404)
+      expect(@bulk_discount.reload.bulk_quantity).to eq(@orig_quant)
+      expect(@bulk_discount.reload.pc_off).to eq(@orig_pc_off)
+    end
+
     it "requires bulk_quantity input" do
       visit edit_merchant_bulk_discount_path(@bulk_discount)
 

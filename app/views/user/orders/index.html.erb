@@ -2,7 +2,7 @@
 
 <% @user_orders.each do |order| %>
   <div id="order-<%= order.id %>" class="card mb-3">
-    <div class="row no-gutters col-md-9 card-body">
+    <div class="row col-md-9 card-body">
       <h5 class="card-title"><%= link_to "Order #{order.id}", user_order_path(order) %></h5>
       <ul>
         <li>Placed on: <%= Date.strptime(order.created_at.to_s) %></li>

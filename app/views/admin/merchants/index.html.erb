@@ -2,7 +2,7 @@
 
 <% @merchants.each do |merchant| %>
   <div id="merchant-id-<%= merchant.id %>" class="card mb-3">
-    <div class="row no-gutters col-md-9 card-body">
+    <div class="row col-md-9 card-body">
       <h5 class="card-title"><%= link_to merchant.name, admin_merchant_path(merchant) %></h5>
       <ul>
         <li>Email: <%= merchant.email %></li>

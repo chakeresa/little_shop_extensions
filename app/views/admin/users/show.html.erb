@@ -5,7 +5,7 @@
     <h3>Addresses:</h3>
     <% @addresses.each do |address| %>
       <div id="address-<%= address.id %>" class="card mb-3">
-        <div class="row no-gutters col-md-9 card-body">
+        <div class="row col-md-9 card-body">
           <h5 class="card-title">Nickname: <%= address.nickname %></h5>
           <ul>
             <li>Street address: <%= address.street %></li>

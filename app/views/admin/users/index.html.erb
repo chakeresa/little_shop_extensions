@@ -2,7 +2,7 @@
 
 <% @users.each do |user| %>
   <div id="user-<%= user.id %>" class="card mb-3">
-    <div class="row no-gutters col-md-9 card-body">
+    <div class="row col-md-9 card-body">
       <h3 class="card-title"><%= link_to user.name, admin_user_path(user) %></h3>
       <ul>
         <li>Registered: <%= Date.strptime(user.created_at.to_s) %></li>

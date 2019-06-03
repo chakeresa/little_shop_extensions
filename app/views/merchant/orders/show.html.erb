@@ -1,11 +1,11 @@
 <h1>Order Number: <%= @order.id %></h1>
-<h5>Order Status: <%= @order.status.titleize %></h5>
-<h5>Customer Name: <%= @customer.name %></h5>
-<h5>Customer Address: <%= @address.street %>, <%= @address.city %>, <%= @address.state %>, <%= @address.zip %></h5>
+<p>Order Status: <%= @order.status.titleize %></p>
+<p>Customer Name: <%= @customer.name %></p>
+<p>Customer Address: <%= @address.street %>, <%= @address.city %>, <%= @address.state %>, <%= @address.zip %></p>
 
 <% @order.merchant_items(@merchant).each do |item| %>
   <div id="items-index-<%= item.id %>" class="card mb-3">
-    <div class="row no-gutters">
+    <div class="row">
       <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
       <div class = "col-md-9 card-body">
         <h5 class="card-title"><%= link_to item.name, item_path(item) %></h5>
@@ -21,7 +21,7 @@
         <% if item.item_fulfilled?(@order) == false %>
           <% if item.sufficient_inventory(@order) %>
             <% item.item_orders(@order).each do |oi| %>
-              <p><%= button_to "Fulfill Item", merchant_fulfill_item_path(oi), method: :patch %></p>
+              <p><%= button_to "Fulfill Item", merchant_fulfill_item_path(oi), method: :patch, class: "btn btn-primary" %></p>
             <% end %>
           <% elsif (item.item_fulfilled?(@order) == false) && !(item.sufficient_inventory(@order)) %>
             <p>You do not have sufficient inventory to fulfill this item.</p>

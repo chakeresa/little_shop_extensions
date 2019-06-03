@@ -24,6 +24,15 @@ RSpec.describe 'As a merchant user: ' do
         expect(page).to_not have_content(@other_merchant.name)
       end
     end
+
+    it "has a link to see my bulk discounts" do
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
+
+      visit merchant_dashboard_path
+      click_link "View my bulk discounts"
+
+      expect(current_path).to eq(merchant_bulk_discounts_path)
+    end
   end
 
   describe "when I have orders" do

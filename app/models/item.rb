@@ -14,7 +14,7 @@ class Item < ApplicationRecord
   DEFAULT_IMAGE = "https://www.ultimate-realty.com/wp-content/uploads/sites/6518/2019/04/Image-Coming-Soon.png"
 
   def self.active_items
-    self.where(active: true)
+    self.where(active: true).order(:id)
   end
 
   def self.sort_by_popularity(limit, direction)

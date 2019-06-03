@@ -42,7 +42,7 @@ RSpec.describe "Cart checkout functionality: " do
       expect(page).to have_link("Order #{Order.last.id}")
       expect(page).to have_content("pending")
       expect(page).to have_content("Cart: 0")
-      expect(page).to have_content("Shipped to: #{@addr_1.street}, #{@addr_1.city}, #{@addr_1.state}, #{@addr_1.zip}")
+      expect(page).to have_content("Shipping to #{@addr_1.nickname} address: #{@addr_1.street}, #{@addr_1.city}, #{@addr_1.state}, #{@addr_1.zip}")
     end
 
     it "defaults to my primary address" do
@@ -56,7 +56,7 @@ RSpec.describe "Cart checkout functionality: " do
       expect(page).to have_link("Order #{Order.last.id}")
       expect(page).to have_content("pending")
       expect(page).to have_content("Cart: 0")
-      expect(page).to have_content("Shipped to: #{@addr_2.street}, #{@addr_2.city}, #{@addr_2.state}, #{@addr_2.zip}")
+      expect(page).to have_content("Shipping to #{@addr_2.nickname} address: #{@addr_2.street}, #{@addr_2.city}, #{@addr_2.state}, #{@addr_2.zip}")
     end
   end
 

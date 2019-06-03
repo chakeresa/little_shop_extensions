@@ -1,12 +1,16 @@
 <h1><%= "#{current_user.name}'s Orders" %></h1>
 
 <% @user_orders.each do |order| %>
-  <div id="order-<%= order.id %>">
-    <h3><%= link_to "Order #{order.id}", user_order_path(order) %></h3>
-    <p>Placed on: <%= order.created_at %></p>
-    <p>Last Updated: <%= order.updated_at %></p>
-    <p>Status: <%= order.status %></p>
-    <p>Total Cost: <%= number_to_currency(order.grand_total) %></p>
-    <p>Shipped to: <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.zip %></p>
+  <div id="order-<%= order.id %>" class="card mb-3">
+    <div class="row no-gutters col-md-9 card-body">
+      <h5 class="card-title"><%= link_to "Order #{order.id}", user_order_path(order) %></h5>
+      <ul>
+        <li>Placed on: <%= Date.strptime(order.created_at.to_s) %></li>
+        <li>Last Updated: <%= Date.strptime(order.updated_at.to_s) %></li>
+        <li>Status: <%= order.status %></li>
+        <li>Total Cost: <%= number_to_currency(order.grand_total) %></li>
+        <li>Shipping to <%= order.address.nickname %> address: <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.zip %></li>
+      </ul>
+    </div>
   </div>
 <% end %>

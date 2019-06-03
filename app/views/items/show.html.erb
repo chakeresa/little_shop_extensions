@@ -9,5 +9,5 @@
 <% end %>
 
 <% if (current_user == nil) || current_user.user? %>
-  <%= button_to "Add to Cart", cart_add_item_path(@item)  %>
+  <%= button_to "Add to Cart", cart_add_item_path(@item), class: "btn btn-primary" %>
 <% end %>

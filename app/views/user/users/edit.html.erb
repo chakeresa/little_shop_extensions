@@ -11,10 +11,13 @@
     <br>
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation, value: "" %>
-    <br>
-    
+    <br><br>
+
     <%= f.fields_for :addresses do |c| %>
-      <%= c.label :street, "Address" %>
+      <%= c.label :nickname, "Address Nickname" %>
+      <%= c.text_field :nickname %>
+      <br>
+      <%= c.label :street, "Street Address" %>
       <%= c.text_field :street, required: true %>
       <br>
       <%= c.label :city %>
@@ -25,7 +28,7 @@
       <br>
       <%= c.label :zip %>
       <%= c.text_field :zip, required: true %>
-      <br>
+      <br><br>
     <% end %>
 
     <%= f.submit "Submit Changes" %>

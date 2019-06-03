@@ -10,7 +10,7 @@
 <p><%= @address.street %></p>
 <p><%= @address.city %>, <%= @address.state %></p>
 <p><%= @address.zip %></p>
-
+<br>
 <h5>Items Ordered:</h5>
 <% @items.each do |item| %>
   <div id="item-<%= item.id %>" class="card mb-3">
@@ -28,5 +28,5 @@
 <% end %>
 
 <% if @order.pending? %>
-  <%= button_to "Cancel Order", user_cancel_order_path(@order), method: "patch" %>
+  <%= button_to "Cancel Order", user_cancel_order_path(@order), method: "patch", class: "btn btn-primary" %>
 <% end %>

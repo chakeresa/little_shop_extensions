@@ -7,6 +7,7 @@ class User < ApplicationRecord
                         :role
   has_many :orders
   has_many :items
+  has_many :bulk_discounts
   has_one :primary_address, class_name: 'Address'
 
   has_many :addresses, dependent: :destroy

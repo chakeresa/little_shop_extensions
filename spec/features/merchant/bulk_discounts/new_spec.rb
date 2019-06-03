@@ -134,5 +134,19 @@ RSpec.describe 'Bulk Discount Edit Form' do
       expect(page).to have_content("Pc off must be greater than or equal to 0.01")
       expect(BulkDiscount.count).to eq(0)
     end
+
+    it "pc_off input must be 99.99 or less" do
+      visit new_merchant_bulk_discount_path
+
+      fill_in "bulk_discount[bulk_quantity]", with: @bulk_quantity
+      fill_in "bulk_discount[pc_off]", with: 100
+
+      click_button "Create Bulk Discount"
+
+      expect(current_path).to eq(new_merchant_bulk_discount_path)
+      expect(page).to have_field("bulk_discount[bulk_quantity]")
+      expect(page).to have_content("Pc off must be less than or equal to 99.99")
+      expect(BulkDiscount.count).to eq(0)
+    end
   end
 end

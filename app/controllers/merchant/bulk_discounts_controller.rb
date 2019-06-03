@@ -14,7 +14,7 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
       redirect_to merchant_bulk_discounts_path
     else
       flash[:danger] = bulk_discount.errors.full_messages.join(". ")
-      render :new
+      redirect_to new_merchant_bulk_discount_path
     end
   end
 

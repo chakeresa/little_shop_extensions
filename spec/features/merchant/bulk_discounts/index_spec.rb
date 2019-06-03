@@ -72,5 +72,20 @@ RSpec.describe 'Merchant Bulk Discounts Index' do
       expect(page).to_not have_content(discount_2.bulk_quantity)
       expect(@merchant.bulk_discounts).to eq([discount_1])
     end
+
+    it "I cannot delete another merchant's bulk discounts" do
+      discount_1 = create(:bulk_discount, user: @merchant)
+
+      visit merchant_bulk_discounts_path
+
+      discount_1.update(user: create(:merchant))
+
+      within("#bulk-discount-#{discount_1.id}") do
+        click_button "Delete Discount"
+      end
+
+      expect(status_code).to eq(404)
+      expect(BulkDiscount.count).to eq(1)
+    end
   end
 end

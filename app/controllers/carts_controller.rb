@@ -34,6 +34,10 @@ class CartsController < ApplicationController
   end
 
   def show
+    if current_user?
+      @addresses = current_user.addresses
+    end
+
     if current_user && (current_user.admin? || current_user.merchant?)
       render file: "/public/404", status: 404
     end
@@ -46,7 +50,7 @@ class CartsController < ApplicationController
   end
 
   def checkout
-    new_order = current_user.orders.create
+    new_order = current_user.orders.create!(order_params)
     cart.item_and_quantity_hash.each do |item, quantity|
       OrderItem.create(item: item, order: new_order, quantity: quantity, price_per_item: item.price)
     end
@@ -65,5 +69,9 @@ class CartsController < ApplicationController
     else
       flash[:danger] = "Merchant does not have any more #{item.name}"
     end
+  end
+
+  def order_params
+    params.require(:order).permit(:address_id)
   end
 end

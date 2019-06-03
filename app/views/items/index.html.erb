@@ -20,7 +20,7 @@
 
 <% @items.each do |item| %>
   <section id="item-id-<%= item.id %>" class="card mb-3">
-    <div class="row no-gutters">
+    <div class="row">
       <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
       <div class="col-md-9">
         <div class="card-body">

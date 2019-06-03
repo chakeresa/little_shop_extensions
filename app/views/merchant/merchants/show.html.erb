@@ -1,11 +1,21 @@
-<%= link_to 'View all items for sale', merchant_items_path %>
+<div id="dashboard-show">
+  <h1><%= @merchant.name %></h1>
+  <%= link_to 'View all items for sale', merchant_items_path %>
+  <p>Email: <%= @merchant.email %></p>
+  <% if @address %>
+    <p>Address: <%= @address.street %></p>
+    <p><%= @address.city %>, <%= @address.state %></p>
+    <p>Zip: <%= @address.zip %></p>
+  <% end %>
+</div>
+
 <div id="statistics">
-  <h2>Statistics</h2>
+  <h4>Statistics</h4>
   <div id="stats-top-five">
-    <h4>Top Selling Items</h4>
+    <h5>Top Selling Items</h5>
     <ol>
       <% @merchant.top_five_items.each do |item|  %>
-        <li>Item: <%= item.name %>, Quantity: <%= item.total_sold %></li>
+        <li><%= item.name %>, Quantity: <%= item.total_sold %></li>
       <% end %>
     </ol>
   </div>
@@ -17,63 +27,52 @@
 
   <% if @merchant.top_user_items %>
   <div class='top-3-states'>
-    <h4>Top 3 States </h4>
+    <h5>Top 3 States </h5>
     <ol>
       <% @merchant.top_three_states.each do |item| %>
-        <li>State: <%= item.state %> Quantity: <%= item.total_quantity %>
+        <li><%= item.state %>, Quantity: <%= item.total_quantity %>
       <% end %>
     </ol>
   </div>
 
   <div class='top-3-cities'>
-    <h4>Top 3 Cities </h4>
+    <h5>Top 3 Cities </h5>
     <ol>
       <% @merchant.top_three_cities.each do |item| %>
-        <li>City: <%= item.city %>, <%= item.state %> Quantity: <%= item.total_quantity %>
+        <li><%= item.city %>, <%= item.state %>, Quantity: <%= item.total_quantity %>
       <% end %>
     </ol>
   </div>
 
   <div class='top-user-with-most-orders'>
-    <h4>Top User with Most Orders</h4>
-        <p> User: <%= @merchant.top_user_orders.name %> Count: <%= @merchant.top_user_orders.total_orders %> </p>
-        <p>None Yet</p>
+    <h5>Top User with Most Orders</h5>
+        <p><%= @merchant.top_user_orders.name %>, Order Count: <%= @merchant.top_user_orders.total_orders %> </p>
   </div>
 
   <div class='top-user-with-most-items'>
-    <h4>Top User with Most Orders</h4>
-        <p> User: <%= @merchant.top_user_items.name %> Count: <%= @merchant.top_user_items.total_items %> </p>
-        <p>None Yet</p>
+    <h5>Top User with Most Items</h5>
+        <p><%= @merchant.top_user_items.name %>, Item Count: <%= @merchant.top_user_items.total_items %> </p>
   </div>
 
   <div class='top-user-with-most-money'>
-    <h4>Top User with Most Orders</h4>
+    <h5>Top Users with Most Spent</h5>
       <ol>
       <% @merchant.top_3_spenders.each do |user| %>
-        <li> User: <%= user.name %>, Total Money Spent: <%= user.total_spent %> </li>
+        <li><%= user.name %>, Total Money Spent: <%= number_to_currency(user.total_spent) %> </li>
       <% end %>
-        <p>None Yet</p>
   </div>
 
   <% else %>
-    <h4>No Statistics</h4>
+    <h5>No Statistics</h5>
   <% end %>
-</div>
-
-<div id="dashboard-show">
-  <h1><%= @merchant.name %></h1>
-  <p>Email: <%= @merchant.email %></p>
-  <p>Address: <%= @merchant.address %></p>
-  <p><%= @merchant.city %>, <%= @merchant.state %></p>
-  <p>Zip: <%= @merchant.zip %></p>
 </div>
 
 <h4>Orders</h4>
 
 <% @merchant_orders.each do |order| %>
   <div id="merchant-orders-<%= order.id %>" class="card mb-3">
-    <div class="row no-gutters col-md-9 card-body">
-      <h3 class="card-title"><%= link_to "Order #{order.id}", merchant_order_path(order) %></h3>
+    <div class="row col-md-9 card-body">
+      <h5 class="card-title"><%= link_to "Order #{order.id}", merchant_order_path(order) %></h5>
       <ul>
         <li>Date Ordered: <%= Date.strptime(order.created_at.to_s) %></li>
         <li>Total Quantity Ordered: <%= order.total_quantity_for_merchant(@merchant) %></li>

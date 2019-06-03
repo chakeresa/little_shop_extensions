@@ -1,7 +1,7 @@
 <% if cart.is_not_empty %>
   <% cart.item_and_quantity_hash.each do |item, quantity| %>
     <div id="item-<%= item.id %>" class="card mb-3">
-      <div class="row no-gutters">
+      <div class="row">
         <%= tag :img, src: item.image || @default_image, alt: "image of #{item.name}", class: "col-md-3 card-img" %>
         <div class="col-md-9">
           <div class="card-body">
@@ -23,9 +23,28 @@
   <h2>Grand Total: <%= number_to_currency(cart.grand_total) %></h2>
 
   <% if current_user?  %>
-    <%= button_to "Check Out", cart_path %>
+    <% if @addresses == [] %>
+       <p>Add an address to check out</p>
+       <%= link_to "Add a New Address", new_user_address_path, class: "btn btn-primary" %>
+    <% else %>
+      <%= form_tag(cart_path, method: "post") do %>
+        <p>Select Address:</p>
+        <%= collection_select(
+        :order,
+        :address_id,
+        @addresses,
+        :id,
+        :street,
+        { selected: current_user.primary_address_id }
+        ) %>
+        <%= link_to "Add a New Address", new_user_address_path, class: "btn btn-primary" %>
+        <br><br>
+        <%= submit_tag("Check Out", class: "btn btn-primary") %>
+      <% end %>
+    <% end %>
   <% end %>
-  <%= button_to "Empty Cart", { controller: :carts, action: :destroy }, method: :delete %>
+  <br>
+  <%= button_to "Empty Cart", { controller: :carts, action: :destroy }, method: :delete, class: "btn btn-primary" %>
 <% else %>
   <h1>There is nothing in your cart!</h1>
 <% end %>

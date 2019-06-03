@@ -5,12 +5,14 @@ RSpec.describe 'As a merchant: ' do
   describe "when I visit an order show page from my dashboard, " do
     before :each do
       @user = create(:user)
-      @order_1 = create(:order, user: @user)
-      @order_4 = create(:order, user: @user)
+      address = create(:address, user: @user)
+      @order_1 = create(:order, user: @user, address: address)
+      @order_4 = create(:order, user: @user, address: address)
 
       @user_2 = create(:user)
-      @order_2 = create(:order, user: @user_2)
-      @order_3 = create(:shipped_order, user: @user_2)
+      address_2 = create(:address, user: @user_2)
+      @order_2 = create(:order, user: @user_2, address: address_2)
+      @order_3 = create(:shipped_order, user: @user_2, address: address_2)
 
       #create an item for another merchant that is part of one of our merchant's orders.
       @other_merchant = create(:merchant)
@@ -40,6 +42,31 @@ RSpec.describe 'As a merchant: ' do
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
       visit merchant_order_path(@order_2)
+    end
+
+    it "shows details about the order" do
+      visit merchant_order_path(@order_2)
+
+      expect(page).to have_content(@order_2.id)
+      expect(page).to have_content("Customer Name: #{@order_2.user.name}")
+      expect(page).to have_content("Customer Address: #{@order_2.address.street}, #{@order_2.address.city}, #{@order_2.address.state}, #{@order_2.address.zip}")
+      expect(page).to have_content("Order Status: #{@order_2.status.titleize}")
+
+      within "#items-index-#{@item_2.id}" do
+        expect(page).to have_link(@item_2.name)
+        expect(page).to have_css("img[src*='#{@item_2.image}']")
+        expect(page).to have_content("Purchase Price: #{number_to_currency(@oi_3.price_per_item)}")
+        expect(page).to have_content("Purchase Quantity: #{(@oi_3.quantity)}")
+      end
+
+      within "#items-index-#{@item_3.id}" do
+        expect(page).to have_link(@item_3.name)
+        expect(page).to have_css("img[src*='#{@item_3.image}']")
+        expect(page).to have_content("Purchase Price: #{number_to_currency(@oi_4.price_per_item)}")
+        expect(page).to have_content("Purchase Quantity: #{(@oi_4.quantity)}")
+      end
+
+      expect(page).to_not have_content(@item_1.name)
     end
 
     it "if the user's desired quantity <= merchant's current inventory, I see a button to fulfill the item " do

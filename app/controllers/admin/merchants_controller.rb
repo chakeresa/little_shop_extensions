@@ -1,6 +1,7 @@
 class Admin::MerchantsController < Admin::BaseController
   def show
     @merchant = User.find(params[:id])
+    @address = @merchant.addresses.first
     @pending_orders = Order.pending_merchant_orders(@merchant)
     if @merchant.user?
       redirect_to admin_user_path(@merchant)

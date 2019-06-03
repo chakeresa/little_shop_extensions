@@ -4,10 +4,21 @@ RSpec.describe "As an admin user" do
   context "When I log into my dashboard" do
     before :each do
       @admin = create(:admin)
-      @user_1 = create(:user, city: "Glendale", state: "CO")
-      @user_2 = create(:user, city: "Glendale", state: "IA")
-      @user_3 = create(:user, city: "Glendale", state: "CA")
-      @user_4 = create(:user, city: "Golden", state: "CO")
+      @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1, city: "Glendale", state: "CO")
+      @user_1.update(primary_address: @addr_1)
+
+      @user_2 = create(:user)
+      @addr_2 = create(:address, user: @user_2, city: "Glendale", state: "IA")
+      @user_2.update(primary_address: @addr_2)
+
+      @user_3 = create(:user)
+      @addr_3 = create(:address, user: @user_3, city: "Glendale", state: "CA")
+      @user_3.update(primary_address: @addr_3)
+
+      @user_4 = create(:user)
+      @addr_4 = create(:address, user: @user_4, city: "Golden", state: "CO")
+      @user_4.update(primary_address: @addr_4)
 
       @merchant_1 = create(:merchant)
       @item_1 = create(:item, user: @merchant_1, inventory: 20)

@@ -6,7 +6,7 @@
   <div class="orders-index" id="packaged-orders">
     <% @packaged_orders.each do |order| %>
     <section id="order-id-<%= order.id %>" class="card mb-3">
-      <div class="row no-gutters col-md-9 card-body">
+      <div class="row col-md-9 card-body">
         <%= link_to order.user.name, admin_user_path(order.user), class: "card-title" %>
         <ul>
           <li>Order Id: <%= order.id %></li>
@@ -25,7 +25,7 @@
   <div class="orders-index" id="pending-orders">
     <% @pending_orders.each do |order| %>
     <section id="order-id-<%= order.id %>" class="card mb-3">
-      <div class="row no-gutters col-md-9 card-body">
+      <div class="row col-md-9 card-body">
         <%= link_to order.user.name, admin_user_path(order.user), class: "card-title" %>
         <ul>
           <li>Order Id: <%= order.id %></li>
@@ -42,7 +42,7 @@
   <div class="orders-index" id="shipped-orders">
     <% @shipped_orders.each do |order| %>
     <section id="order-id-<%= order.id %>" class="card mb-3">
-      <div class="row no-gutters col-md-9 card-body">
+      <div class="row col-md-9 card-body">
         <%= link_to order.user.name, admin_user_path(order.user), class: "card-title" %>
         <ul>
           <li>Order Id: <%= order.id %></li>
@@ -59,7 +59,7 @@
   <div class="orders-index" id="cancelled-orders">
     <% @cancelled_orders.each do |order| %>
     <section id="order-id-<%= order.id %>" class="card mb-3">
-      <div class="row no-gutters col-md-9 card-body">
+      <div class="row col-md-9 card-body">
         <%= link_to order.user.name, admin_user_path(order.user), class: "card-title" %>
         <ul>
           <li>Order Id: <%= order.id %></li>

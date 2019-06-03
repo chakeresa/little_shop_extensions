@@ -1,10 +1,22 @@
 <div id="user-profile-<%= @user.id %>">
-  <h2>Name: <%= link_to @user.name, admin_user_path(@user) %></h2>
+  <h2><%= @user.name %></h2>
   <p>Email: <%= @user.email %></p>
-  <p>Street address: <%= @user.address %></p>
-  <p>City: <%= @user.city %></p>
-  <p>State: <%= @user.state %></p>
-  <p>Zip: <%= @user.zip %></p>
+  <% if @addresses != [] %>
+    <h3>Addresses:</h3>
+    <% @addresses.each do |address| %>
+      <div id="address-<%= address.id %>" class="card mb-3">
+        <div class="row col-md-9 card-body">
+          <h5 class="card-title">Nickname: <%= address.nickname %></h5>
+          <ul>
+            <li>Street address: <%= address.street %></li>
+            <li>City: <%= address.city %></li>
+            <li>State: <%= address.state %></li>
+            <li>Zip: <%= address.zip %></li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
 </div>
 
-<%= button_to "Upgrade Account", admin_upgrade_user_path(@user), method: "patch" %>
+<%= button_to "Upgrade Account", admin_upgrade_user_path(@user), method: "patch", class: "btn btn-primary" %>

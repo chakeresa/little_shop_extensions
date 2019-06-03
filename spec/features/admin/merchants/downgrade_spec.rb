@@ -4,10 +4,11 @@ RSpec.describe "Downgrading a merchant", type: :feature do
   context "as a merchant" do
     before(:each) do
       @merchant = create(:merchant)
+      create(:address, user: @merchant)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
     end
-    
+
     it "I don't see a button to downgrade my account" do
       visit merchant_dashboard_path
 
@@ -18,7 +19,11 @@ RSpec.describe "Downgrading a merchant", type: :feature do
   context "as an admin" do
     before(:each) do
       @admin = create(:admin)
+      create(:address, user: @admin)
+
       @merchant = create(:merchant)
+      create(:address, user: @merchant)
+
       @item = create(:item, user: @merchant, name: "RANDOM WORD")
     end
 

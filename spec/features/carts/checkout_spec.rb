@@ -8,6 +8,10 @@ RSpec.describe "Cart checkout functionality: " do
       @item_2 = create(:item, user: @merchant_1, name: "Chair")
 
       @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1)
+      @addr_2 = create(:address, user: @user_1)
+      @user_1.update!(primary_address_id: @addr_2.id)
+
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
 
       visit item_path(@item_1)
@@ -28,13 +32,60 @@ RSpec.describe "Cart checkout functionality: " do
 
     it "I can check out and see my order" do
       visit cart_path
+
+      find('#order_address_id').select(@addr_1.street)
       click_button 'Check Out'
+
       expect(page).to have_content("Your order was created!")
 
       expect(current_path).to eq(user_orders_path)
       expect(page).to have_link("Order #{Order.last.id}")
       expect(page).to have_content("pending")
       expect(page).to have_content("Cart: 0")
+      expect(page).to have_content("Shipping to #{@addr_1.nickname} address: #{@addr_1.street}, #{@addr_1.city}, #{@addr_1.state}, #{@addr_1.zip}")
+    end
+
+    it "defaults to my primary address" do
+      visit cart_path
+
+      click_button 'Check Out'
+
+      expect(page).to have_content("Your order was created!")
+
+      expect(current_path).to eq(user_orders_path)
+      expect(page).to have_link("Order #{Order.last.id}")
+      expect(page).to have_content("pending")
+      expect(page).to have_content("Cart: 0")
+      expect(page).to have_content("Shipping to #{@addr_2.nickname} address: #{@addr_2.street}, #{@addr_2.city}, #{@addr_2.state}, #{@addr_2.zip}")
+    end
+  end
+
+  describe "as a logged in regular user with no addresses" do
+    before(:each) do
+      @merchant_1 = create(:merchant)
+      @item_1 = create(:item, user: @merchant_1, name: "Sofa")
+      @item_2 = create(:item, user: @merchant_1, name: "Chair")
+
+      @user_1 = create(:user)
+
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
+
+      visit item_path(@item_1)
+      click_button "Add to Cart"
+
+      visit item_path(@item_2)
+      click_button "Add to Cart"
+
+      visit item_path(@item_1)
+      click_button "Add to Cart"
+    end
+
+    it "I see a message to add an address" do
+      visit cart_path
+
+      expect(page).to have_content("Add an address to check out")
+      expect(page).to have_link('Add a New Address')
+      expect(page).to_not have_button('Check Out')
     end
   end
 

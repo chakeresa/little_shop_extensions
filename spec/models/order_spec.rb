@@ -4,12 +4,14 @@ RSpec.describe Order, type: :model do
 
   describe 'validates' do
     it {should validate_presence_of :status}
+    it {should validate_presence_of :address_id}
   end
 
   describe 'relationships' do
     it {should have_many :order_items}
     it {should have_many(:items).through(:order_items)}
     it {should belong_to :user}
+    it {should belong_to(:address).optional}
   end
 
   describe "class methods" do
@@ -32,8 +34,10 @@ RSpec.describe Order, type: :model do
 
       ####### @user_1
       @user_1 = create(:user)
+      @addr_1 = create(:address, user: @user_1, city: "Springfield", state: "KS")
+      @user_1.update(primary_address: @addr_1)
 
-      @order_1 = create(:shipped_order, user: @user_1) # total_quantity = 101
+      @order_1 = create(:shipped_order, user: @user_1, address: @addr_1) # total_quantity = 101
       # merchant_1:
       @oi_1 = create(:fulfilled_order_item, order: @order_1, item: @item_1, quantity: 100, price_per_item: 0.50)
       # merchant_2:
@@ -41,8 +45,10 @@ RSpec.describe Order, type: :model do
 
       ####### @user_2
       @user_2 = create(:user)
+      @addr_2 = create(:address, user: @user_2, city: "Springfield", state: "IL")
+      @user_2.update(primary_address: @addr_2)
 
-      @order_2 = create(:shipped_order, user: @user_2) # total_quantity = 2200
+      @order_2 = create(:shipped_order, user: @user_2, address: @addr_2) # total_quantity = 2200
       # merchant_1:
       @oi_7 = create(:fulfilled_order_item, order: @order_2, item: @item_1, quantity: 200, price_per_item: 0.05)
       # merchant_1:
@@ -50,33 +56,70 @@ RSpec.describe Order, type: :model do
 
       ####### @user_3
       @user_3 = create(:user)
+      @addr_3 = create(:address, user: @user_3, city: "Topeka", state: "KS")
+      @user_3.update(primary_address: @addr_3)
 
-      @order_3 = create(:order, user: @user_3) # pending order
+      @order_3 = create(:order, user: @user_3, address: @addr_3) # pending order
       # merchant_3 / pending order -- should not be included in stats for sales:
       @oi_4 = create(:fulfilled_order_item, order: @order_3, item: @item_4, quantity: 300, price_per_item: 20.0)
 
-      @order_4 = create(:cancelled_order, user: @user_3)
+      @order_4 = create(:cancelled_order, user: @user_3, address: @addr_3)
       # merchant_3 / cancelled order -- should not be included in stats for sales:
       @oi_5 = create(:fulfilled_order_item, order: @order_4, item: @item_4, quantity: 400, price_per_item: 13.0)
 
-      @order_5 = create(:packaged_order, user: @user_3)
+      @order_5 = create(:packaged_order, user: @user_3, address: @addr_3)
       # merchant_3 / packaged order -- should not be included in stats for sales:
       @oi_6 = create(:fulfilled_order_item, order: @order_5, item: @item_5, quantity: 410, price_per_item: 25.0)
 
-      @order_7 = create(:shipped_order, user: @user_3) # total_quantity = 1
+      @order_7 = create(:shipped_order, user: @user_3, address: @addr_3) # total_quantity = 1
       # merchant_2:
       @oi_9 = create(:fulfilled_order_item, order: @order_7, item: @item_2, quantity: 1, price_per_item: 1.0)
 
+      @order_9 = create(:shipped_order, user: @user_3, address: @addr_3)
+      @order_10 = create(:shipped_order, user: @user_3, address: @addr_3)
+
       ####### @user_4
       @user_4 = create(:user)
+      @addr_4 = create(:address, user: @user_4, city: "Denver", state: "CO")
+      @user_4.update(primary_address: @addr_4)
 
-      @order_8 = create(:shipped_order, user: @user_4) # total_quantity = 1
+      @order_8 = create(:shipped_order, user: @user_4, address: @addr_4) # total_quantity = 1
       # merchant_3:
       @oi_10 = create(:fulfilled_order_item, order: @order_8, item: @item_4, quantity: 1, price_per_item: 1.0)
 
-      @order_6 = create(:shipped_order, user: @user_4) # total_quantity = 5
+      @order_6 = create(:shipped_order, user: @user_4, address: @addr_4) # total_quantity = 5
       # merchant_4:
       @oi_8 = create(:fulfilled_order_item, order: @order_6, item: @item_6, quantity: 5, price_per_item: 10000.0)
+    end
+
+    it '::top_3_states shows shows the top 3 states where any orders were shipped (by number of orders), and count of orders' do
+      # to-do: move to Order class
+
+      top_3_states = ["KS", "CO", "IL"]
+      top_3_states_order_counts = [4, 2, 1]
+
+      actual_states = Order.top_3_states.map(&:state)
+      expect(actual_states).to eq(top_3_states)
+
+      actual_counts = Order.top_3_states.map(&:order_count)
+      expect(actual_counts).to eq(top_3_states_order_counts)
+    end
+
+    it '::top_3_cities shows the top 3 city/state combos where any orders were shipped (by number of orders), and count of orders' do
+      # to-do: move to Order class
+
+      top_3_cities = ["Topeka", "Denver", "Springfield"]
+      top_3_states = ["KS", "CO", "IL"]
+      top_3_cities_order_counts = [3, 2, 1]
+
+      actual_cities = Order.top_3_cities.map(&:city)
+      expect(actual_cities).to eq(top_3_cities)
+
+      actual_states = Order.top_3_cities.map(&:state)
+      expect(actual_states).to eq(top_3_states)
+
+      actual_counts = Order.top_3_cities.map(&:order_count)
+      expect(actual_counts).to eq(top_3_cities_order_counts)
     end
 
     it '::top_3_by_quantity shows top 3 biggest orders by quantity of items shipped in an order, plus their quantities' do
@@ -98,7 +141,7 @@ RSpec.describe Order, type: :model do
     end
 
     it '::shipped_orders returns shipped orders' do
-      expect(Order.shipped_orders).to eq([@order_1, @order_2, @order_7, @order_8, @order_6 ])
+      expect(Order.shipped_orders).to eq([@order_1, @order_2, @order_7, @order_9, @order_10, @order_8, @order_6 ])
     end
 
     it '::cancelled_orders returns cancelled orders' do
@@ -155,7 +198,7 @@ RSpec.describe Order, type: :model do
     end
   end
 
-  describe 'class methods' do
+  describe 'more instance methods' do
     before :each do
       #create 2 pending orders and 1 shipped order.
       @user_1 = create(:user)

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "User Login Workflow", type: :feature do
   scenario 'correct user login information entered' do
-    user = User.create!(email: "abc@abc.com", password: "password", name: "user1", address: "kgysdfklvysgu", city: 'city town', state: 'state place', zip: '987123', role: 'user')
+    user = create(:user)
 
     visit root_path
     click_on 'Login'
@@ -19,7 +19,7 @@ RSpec.describe "User Login Workflow", type: :feature do
   end
 
   scenario 'incorrect user login password entered' do
-    user = User.create!(email: "abc@abc.com", password: "password", name: "user1", address: "kgysdfklvysgu", city: 'city town', state: 'state place', zip: '987123', role: 'user')
+    user = create(:user)
 
     visit login_path
 
@@ -47,7 +47,7 @@ RSpec.describe "User Login Workflow", type: :feature do
   end
 
   scenario 'admin user logs in' do
-    admin = User.create!(email: "jkhbwljb@gmail.com", password: "password", name: "admin1", address: "kgysdfklvysgu", city: 'city town', state: 'state place', zip: '987123', role: 'admin')
+    admin = create(:admin)
 
     visit login_path
 
@@ -62,7 +62,7 @@ RSpec.describe "User Login Workflow", type: :feature do
   end
 
   scenario 'merchant user logs in' do
-    merchant = User.create!(email: "jkhbwljb@gmail.com", password: "password", name: "merchant1", address: "kgysdfklvysgu", city: 'city town', state: 'state place', zip: '987123', role: 'merchant')
+    merchant = create(:merchant)
 
     visit login_path
 

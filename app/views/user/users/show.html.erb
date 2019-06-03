@@ -1,11 +1,22 @@
 <h1><%= current_user.name %></h1>
 <p><%= current_user.email %></p>
-<p><%= current_user.address %></p>
-<p><%= current_user.city %>, <%= current_user.state %></p>
-<p><%= current_user.zip %></p>
-
-<%= link_to "Edit My Profile or Password", profile_edit_path %>
-
 <% if @user_orders.any? %>
   <p><%= link_to "My Orders", user_orders_path %></p>
 <% end %>
+<%= link_to "Edit My Profile or Password", profile_edit_path, class: "btn btn-primary" %>
+<br><br>
+<h4>Address(es):</h4>
+<% @addresses.each do |address| %>
+  <div id="address-<%= address.id %>" class="card mb-3">
+    <div class="row col-md-9 card-body">
+      <h5 class="card-title"><%= address.nickname %><%= " (primary address)" if address.id == current_user.primary_address_id %></h5>
+      <ul>
+        <li><%= address.street %></li>
+        <li><%= address.city %>, <%= address.state %></li>
+        <li><%= address.zip %></li>
+        <li><%= button_to "Delete Address", delete_address_path(address), method: "delete", class: "btn btn-primary", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %></li>
+      </ul>
+    </div>
+  </div>
+<% end %>
+<%= link_to "Add a New Address", new_user_address_path, class: "btn btn-primary" %>

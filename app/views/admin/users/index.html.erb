@@ -2,12 +2,12 @@
 
 <% @users.each do |user| %>
   <div id="user-<%= user.id %>" class="card mb-3">
-    <div class="row no-gutters col-md-9 card-body">
+    <div class="row col-md-9 card-body">
       <h3 class="card-title"><%= link_to user.name, admin_user_path(user) %></h3>
-      <br>
-      <p>Registered: <%= Date.strptime(user.created_at.to_s) %></p>
-      <br>
-      <%= button_to "Upgrade to Merchant", admin_upgrade_user_path(user), method: "patch", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %>
+      <ul>
+        <li>Registered: <%= Date.strptime(user.created_at.to_s) %></li>
+        <li><%= button_to "Upgrade to Merchant", admin_upgrade_user_path(user), method: "patch", class: "btn btn-primary", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %></li>
+      </ul>
     </div>
   </div>
 <% end %>

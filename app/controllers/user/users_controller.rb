@@ -1,13 +1,15 @@
 class User::UsersController < User::BaseController
   def show
     @user_orders = current_user.orders
+    @addresses = current_user.reload.addresses
   end
 
   def edit
+    @user = current_user
   end
 
   def update
-    if current_user.email != params[:email].downcase && User.find_by(email: params[:email].downcase)
+    if current_user.email != params[:user][:email].downcase && User.find_by(email: params[:user][:email].downcase)
       flash[:danger] = "That email address is already in use"
       redirect_to profile_edit_path
       return
@@ -19,13 +21,7 @@ class User::UsersController < User::BaseController
   private
 
   def update_params
-    altered_params = params.permit(:name, :email, :address, :city, :state, :zip, :password, :password_confirmation)
-
-    if params[:password] == "" || params[:password_confirmation] == ""
-      altered_params = altered_params.except(:password).except(:password_confirmation)
-    end
-
-    altered_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, {addresses_attributes: ["id", "street", "city", "state", "zip"]})
   end
 
   def attempt_update

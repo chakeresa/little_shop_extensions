@@ -3,27 +3,80 @@ require 'rails_helper'
 RSpec.describe "profile page" do
   context "as a user" do
     before(:each) do
-      @user = User.create!(email:    "abc@def.com",
-                           password: "pw123",
-                           name:     "Abc Def",
-                           address:  "123 Abc St",
-                           city:     "NYC",
-                           state:    "NY",
-                           zip:      "12345"
-                          )
+      @user = User.create!(email: "abc@def.com", password: "pw123", name: "Abc Def")
+      @address = Address.create!(nickname: "work", street: "123 Abc St", city: "NYC", state: "NY", zip: "12345", user: @user)
+      @another_address = Address.create!(nickname: "home", street: "Blah Ln", city: "Denver", state: "CO", zip: "80221", user: @user)
+      @user.update(primary_address_id: @address.id)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user)
         .and_return(@user)
     end
 
-    it "shows my profile data" do
+    it "shows my profile data including all addresses" do
       visit profile_path
 
       expect(page).to have_content(@user.name)
       expect(page).to have_content(@user.email)
-      expect(page).to have_content(@user.address)
-      expect(page).to have_content("#{@user.city}, #{@user.state}")
-      expect(page).to have_content(@user.zip)
+
+      within("#address-#{@address.id}") do
+        expect(page).to have_content("#{@address.nickname} (primary address)")
+        expect(page).to have_content(@address.street)
+        expect(page).to have_content("#{@address.city}, #{@address.state}")
+        expect(page).to have_content(@address.zip)
+      end
+
+      within("#address-#{@another_address.id}") do
+        expect(page).to_not have_content("(primary address)")
+        expect(page).to have_content(@another_address.nickname)
+        expect(page).to have_content(@another_address.street)
+        expect(page).to have_content("#{@another_address.city}, #{@another_address.state}")
+        expect(page).to have_content(@another_address.zip)
+      end
+    end
+
+    it "has buttons to delete my addresses" do
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        expect(page).to have_button("Delete Address")
+      end
+
+      within("#address-#{@another_address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to_not have_content(@another_address.street)
+    end
+
+    it "I can't delete someone else's address" do
+      visit profile_path
+
+      original_addr_id = @address.id
+      another_user = create(:user)
+      @address.update!(user: another_user)
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(status_code).to eq(404)
+      expect(@address.reload.id).to eq(original_addr_id)
+    end
+
+    it "I can't delete an address with associated orders" do
+      order = create(:order, address: @address)
+      original_addr_id = @address.id
+
+      visit profile_path
+
+      within("#address-#{@address.id}") do
+        click_button "Delete Address"
+      end
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("Cannot delete an address that was used for an order")
+      expect(@address.reload.id).to eq(original_addr_id)
     end
 
     it "has a link to edit my profile data" do

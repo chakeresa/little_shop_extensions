@@ -29,12 +29,17 @@ Rails.application.routes.draw do
   # PROFILE ROUTES (AS A USER)
   scope :profile, module: :user, as: :profile do
     get '/', to: "users#show"
-    patch '/', to: "users#update"
     get '/edit', to: "users#edit"
   end
 
+  patch '/users/:id', to: "user/users#update", as: :user
+  delete '/addresses/:id', to: "user/addresses#destroy", as: :delete_address
+  namespace :user do
+    resources :addresses, only: [:new, :create]
+  end
+
   scope :profile, module: :user, as: :user do
-    resources :orders, only: [:index, :show]
+    resources :orders, only: [:index, :show, :update]
     patch '/orders/:id/cancel', to: 'orders#cancel', as: :cancel_order
   end
 

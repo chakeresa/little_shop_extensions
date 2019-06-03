@@ -13,12 +13,7 @@ class User::OrdersController < User::BaseController
   def update
     @order = Order.find(params[:id])
     if @order.user_id == current_user.id
-      if @order.status == "pending"
-        @order.update(address_id: params[:order][:address_id])
-        flash[:success] = "Shipping address succcessfully changed"
-      else
-        flash[:danger] = "Shipping address can only be changed for pending orders"
-      end
+      change_address
       redirect_to user_order_path(@order)
     else
       render file: "/public/404", status: 404
@@ -31,5 +26,16 @@ class User::OrdersController < User::BaseController
 
     flash[:success] = "Order #{order.id} has been cancelled"
     redirect_to profile_path
+  end
+
+  private
+
+  def change_address
+    if @order.status == "pending"
+      @order.update(address_id: params[:order][:address_id])
+      flash[:success] = "Shipping address succcessfully changed"
+    else
+      flash[:danger] = "Shipping address can only be changed for pending orders"
+    end
   end
 end

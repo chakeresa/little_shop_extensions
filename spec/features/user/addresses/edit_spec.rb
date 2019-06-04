@@ -140,8 +140,36 @@ RSpec.describe "Editing an existing address" do
       expect(@addr_1.reload.nickname).to_not eq(@nickname)
     end
 
-    xit "there is no button on my profile page to edit addresses associated with completed orders" do
+    it "there is no button on my profile page to edit addresses associated with completed orders" do
+      addr_2 = create(:address, user: @user_1)
+      pending_order = create(:order, address: addr_2, user: @user_1)
 
+      addr_3 = create(:address, user: @user_1)
+      packaged_order = create(:packaged_order, address: addr_3, user: @user_1)
+
+      addr_4 = create(:address, user: @user_1)
+      shipped_order = create(:shipped_order, address: addr_4, user: @user_1)
+
+      addr_5 = create(:address, user: @user_1)
+      cancelled_order = create(:cancelled_order, address: addr_5, user: @user_1)
+
+      visit profile_path
+
+      within("#address-#{addr_2.id}") do
+        expect(page).to have_link("Edit Address")
+      end
+
+      within("#address-#{addr_3.id}") do
+        expect(page).to_not have_link("Edit Address")
+      end
+
+      within("#address-#{addr_4.id}") do
+        expect(page).to_not have_link("Edit Address")
+      end
+
+      within("#address-#{addr_5.id}") do
+        expect(page).to have_link("Edit Address")
+      end
     end
 
     xit "I cannot edit an address associated with a completed order" do

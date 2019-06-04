@@ -37,7 +37,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Bulk quantity is not a number")
       expect(BulkDiscount.count).to eq(0)
@@ -51,7 +50,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Bulk quantity is not a number")
       expect(BulkDiscount.count).to eq(0)
@@ -61,7 +59,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Bulk quantity must be greater than or equal to 2")
       expect(BulkDiscount.count).to eq(0)
@@ -71,7 +68,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Bulk quantity must be greater than or equal to 2")
       expect(BulkDiscount.count).to eq(0)
@@ -81,7 +77,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Bulk quantity must be an integer")
       expect(BulkDiscount.count).to eq(0)
@@ -95,7 +90,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Pc off is not a number")
       expect(BulkDiscount.count).to eq(0)
@@ -109,7 +103,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Pc off is not a number")
       expect(BulkDiscount.count).to eq(0)
@@ -119,7 +112,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Pc off must be greater than or equal to 0.01")
       expect(BulkDiscount.count).to eq(0)
@@ -129,7 +121,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Pc off must be greater than or equal to 0.01")
       expect(BulkDiscount.count).to eq(0)
@@ -143,7 +134,6 @@ RSpec.describe 'Bulk Discount New Form' do
 
       click_button "Create Bulk Discount"
 
-      expect(current_path).to eq(new_merchant_bulk_discount_path)
       expect(page).to have_field("bulk_discount[bulk_quantity]")
       expect(page).to have_content("Pc off must be less than or equal to 99.99")
       expect(BulkDiscount.count).to eq(0)

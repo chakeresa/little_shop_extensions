@@ -8,13 +8,13 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
   end
 
   def create
-    bulk_discount = BulkDiscount.new(bulk_discount_params)
-    if bulk_discount.save
+    @bulk_discount = BulkDiscount.new(bulk_discount_params)
+    if @bulk_discount.save
       flash[:success] = "A new bulk discount was added"
       redirect_to merchant_bulk_discounts_path
     else
-      flash[:danger] = bulk_discount.errors.full_messages.join(". ")
-      redirect_to new_merchant_bulk_discount_path
+      flash[:danger] = @bulk_discount.errors.full_messages.join(". ")
+      render :new
     end
   end
 

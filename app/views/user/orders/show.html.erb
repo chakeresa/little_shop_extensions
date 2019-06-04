@@ -6,11 +6,15 @@
 <p>Total Items Ordered: <%= @order.total_quantity %></p>
 <p>Total Cost: <%= number_to_currency(@order.grand_total) %></p>
 <br>
-<h5>Shipping to <%= @address.nickname %> address:</h5>
-<p><%= @address.street %></p>
-<p><%= @address.city %>, <%= @address.state %></p>
-<p><%= @address.zip %></p>
-<h6>or change address...</h6>
+<% if @address %>
+  <h5>Shipping to <%= @address.nickname %> address:</h5>
+  <p><%= @address.street %></p>
+  <p><%= @address.city %>, <%= @address.state %></p>
+  <p><%= @address.zip %></p>
+  <h6>or change address...</h6>
+<% else %>
+  <h5>No address associated with this order. Select one below:</h5>
+<% end %>
 <%= form_tag(user_order_path(@order), method: "patch") do %>
   <%= collection_select(
     :order,

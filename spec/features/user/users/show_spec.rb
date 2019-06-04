@@ -103,10 +103,11 @@ RSpec.describe "profile page" do
     end
 
     it "I can't delete an address with associated packaged orders" do
-      order = create(:packaged_order, address: @address)
       original_addr_id = @address.id
 
       visit profile_path
+
+      order = create(:packaged_order, address: @address)
 
       within("#address-#{@address.id}") do
         click_button "Delete Address"
@@ -118,10 +119,11 @@ RSpec.describe "profile page" do
     end
 
     it "I can't delete an address with associated shipped orders" do
-      order = create(:shipped_order, address: @address)
       original_addr_id = @address.id
 
       visit profile_path
+      
+      order = create(:shipped_order, address: @address)
 
       within("#address-#{@address.id}") do
         click_button "Delete Address"

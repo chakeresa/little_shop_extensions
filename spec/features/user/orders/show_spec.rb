@@ -92,7 +92,7 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       find('#order_address_id').select(@another_address.street)
       click_button 'Change Shipping Address'
 
-      expect(page).to have_content("Shipping address can only be changed for pending orders")
+      expect(page).to have_content("Shipping address cannot be changed for completed orders")
       expect(page).to have_content(@address.nickname.titlecase)
       expect(page).to have_content(@address.street)
     end
@@ -105,12 +105,12 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       find('#order_address_id').select(@another_address.street)
       click_button 'Change Shipping Address'
 
-      expect(page).to have_content("Shipping address can only be changed for pending orders")
+      expect(page).to have_content("Shipping address cannot be changed for completed orders")
       expect(page).to have_content(@address.nickname.titlecase)
       expect(page).to have_content(@address.street)
     end
 
-    it "does not allow me to change the address for a cancelled order" do
+    it "does allow me to change the address for a cancelled order" do
       visit user_order_path(@order)
 
       @order.update(status: "cancelled")
@@ -118,9 +118,9 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       find('#order_address_id').select(@another_address.street)
       click_button 'Change Shipping Address'
 
-      expect(page).to have_content("Shipping address can only be changed for pending orders")
-      expect(page).to have_content(@address.nickname.titlecase)
-      expect(page).to have_content(@address.street)
+      expect(page).to_not have_content("Shipping address cannot be changed for completed orders")
+      expect(page).to have_content(@another_address.nickname.titlecase)
+      expect(page).to have_content(@another_address.street)
     end
 
     it "does not allow me to change the address for a different user's pending order" do

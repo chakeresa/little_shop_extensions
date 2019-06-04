@@ -5,7 +5,6 @@ RSpec.describe "Editing an existing address" do
     before(:each) do
       @user_1 = create(:user)
       @addr_1 = create(:address, user: @user_1)
-      # @addr_2 = create(:address, user: @user_1)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
 
       @nickname = "my work"
@@ -119,6 +118,26 @@ RSpec.describe "Editing an existing address" do
 
       expect(page).to have_field("address[nickname]")
       expect(page).to have_content("Zip can't be blank")
+    end
+
+    it "I cannot update another user's address" do
+      visit edit_user_address_path(@addr_1)
+
+      @addr_1.update(user: create(:user))
+
+      fill_in "address[nickname]", with: @nickname
+      click_on "Update Address"
+
+      expect(status_code).to eq(404)
+      expect(@addr_1.reload.nickname).to_not eq(@nickname)
+    end
+
+    xit "there is no button on my profile page to edit addresses associated with completed orders" do
+
+    end
+
+    xit "I cannot edit an address associated with a completed order" do
+
     end
   end
 end

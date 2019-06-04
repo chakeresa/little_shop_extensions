@@ -8,8 +8,8 @@
             <h5 class="card-title"><%= link_to item.name, item_path(item) %></h5>
             <p class="card-text"><%= item.user.name %></p>
             <p class="card-text">
-              <%= "Bulk discount applied (#{number_to_percentage(item.highest_applicable_discount(quantity).pc_off, precision: 2)} off orders of #{item.highest_applicable_discount(quantity).bulk_quantity} or more)" if item.highest_applicable_discount(quantity) %>
-              <%= number_to_currency(item.bulk_price(quantity)) %>
+              <%= "Bulk discount applied (#{number_to_percentage(item.highest_applicable_discount(quantity).pc_off, precision: 2)} off orders of #{item.highest_applicable_discount(quantity).bulk_quantity} or more):" if item.highest_applicable_discount(quantity) %>
+              <%= number_to_currency(item.bulk_price(quantity)) %> each
             </p>
             <div class="quantities" >
               Quantity:<%= button_to "-", cart_decrement_item_path(item), method: :patch%><%= quantity %>

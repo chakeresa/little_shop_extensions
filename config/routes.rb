@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   patch '/users/:id', to: "user/users#update", as: :user
   delete '/addresses/:id', to: "user/addresses#destroy", as: :delete_address
   namespace :user do
-    resources :addresses, only: [:new, :create]
+    resources :addresses, only: [:new, :create, :edit, :update]
   end
 
   scope :profile, module: :user, as: :user do

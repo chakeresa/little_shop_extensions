@@ -14,6 +14,7 @@
         <li><%= address.street %></li>
         <li><%= address.city %>, <%= address.state %></li>
         <li><%= address.zip %></li>
+        <li><%= link_to "Edit Address", edit_user_address_path(address), class: "btn btn-primary" %></li>
         <li><%= button_to "Delete Address", delete_address_path(address), method: "delete", class: "btn btn-primary", data: { confirm: 'Are you sure?', disable_with: 'loading...' } %></li>
       </ul>
     </div>

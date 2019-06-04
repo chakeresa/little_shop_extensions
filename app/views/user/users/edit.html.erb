@@ -12,25 +12,6 @@
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation, value: "" %>
     <br><br>
-
-    <%= f.fields_for :addresses do |c| %>
-      <%= c.label :nickname, "Address Nickname" %>
-      <%= c.text_field :nickname %>
-      <br>
-      <%= c.label :street, "Street Address" %>
-      <%= c.text_field :street, required: true %>
-      <br>
-      <%= c.label :city %>
-      <%= c.text_field :city, required: true %>
-      <br>
-      <%= c.label :state %>
-      <%= c.text_field :state, required: true %>
-      <br>
-      <%= c.label :zip %>
-      <%= c.text_field :zip, required: true %>
-      <br><br>
-    <% end %>
-
     <%= f.submit "Submit Changes" %>
   <% end %>
 </div>

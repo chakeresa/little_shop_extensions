@@ -16,6 +16,14 @@ class User::AddressesController < User::BaseController
     end
   end
 
+  def edit
+    @user = current_user
+    @address = Address.find(params[:id])
+  end
+
+  def update
+  end
+
   def destroy
     address = Address.find(params[:id])
     if address.user_id == current_user.id

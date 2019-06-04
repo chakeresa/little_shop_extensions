@@ -19,6 +19,9 @@ class User::AddressesController < User::BaseController
   def edit
     @user = current_user
     @address = Address.find(params[:id])
+    if @address.user_id != current_user.id
+      render file: "/public/404", status: 404
+    end
   end
 
   def update

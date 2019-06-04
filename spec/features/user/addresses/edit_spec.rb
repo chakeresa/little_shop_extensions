@@ -120,6 +120,14 @@ RSpec.describe "Editing an existing address" do
       expect(page).to have_content("Zip can't be blank")
     end
 
+    it "I cannot see the form to update another user's address" do
+      @addr_1.update(user: create(:user))
+
+      visit edit_user_address_path(@addr_1)
+
+      expect(status_code).to eq(404)
+    end
+
     it "I cannot update another user's address" do
       visit edit_user_address_path(@addr_1)
 

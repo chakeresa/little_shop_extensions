@@ -56,12 +56,16 @@ class Item < ApplicationRecord
     order_items.where("order_items.order_id=?", order.id)
   end
 
-  def sufficient_inventory(order)
-    item_quantity = self.order_items.where("order_items.order_id=?", order.id).first.quantity
-    if (self.inventory) > item_quantity
-      return true
-    else
-      return false
+  def sufficient_inventory?(order)
+    item_quantity = order_items.where("order_items.order_id=?", order.id).first.quantity
+    inventory > item_quantity
+  end
+
+  def bulk_price(quantity)
+    percent_off = 0
+    if discount = user.highest_applicable_discount(quantity)
+      percent_off = discount.pc_off
     end
+    price * (100 - percent_off) / 100.0
   end
 end

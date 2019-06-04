@@ -21,11 +21,11 @@
         <% end %>
 
         <% if item.item_fulfilled?(@order) == false %>
-          <% if item.sufficient_inventory(@order) %>
+          <% if item.sufficient_inventory?(@order) %>
             <% item.item_orders(@order).each do |oi| %>
               <p><%= button_to "Fulfill Item", merchant_fulfill_item_path(oi), method: :patch, class: "btn btn-primary" %></p>
             <% end %>
-          <% elsif (item.item_fulfilled?(@order) == false) && !(item.sufficient_inventory(@order)) %>
+          <% elsif (item.item_fulfilled?(@order) == false) && !(item.sufficient_inventory?(@order)) %>
             <p>You do not have sufficient inventory to fulfill this item.</p>
           <% end %>
         <% end %>

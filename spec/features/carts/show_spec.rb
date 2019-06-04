@@ -113,6 +113,49 @@ RSpec.describe "cart show page", type: :feature do
       expect(page).to have_content("Grand Total: #{number_to_currency(2 * @item_1.price +  @item_2.price)}")
     end
 
+    it 'applies the best bulk discount' do
+      bd_1 = create(:bulk_discount, user: @merchant_1, bulk_quantity: 3)
+      # 2 of merchant_1's item_1 total - bulk discount does NOT apply (not enough)
+
+      # 3 of merchant_1's item_2 total - bulk discount DOES apply
+      visit item_path(@item_2)
+      click_button "Add to Cart"
+      visit item_path(@item_2)
+      click_button "Add to Cart"
+
+      # 3 of merchant_1's item_2 total - bulk discount does NOT apply (wrong merchant)
+      merchant_2 = create(:merchant)
+      item_3 = create(:item, user: merchant_2, name: "Sofa")
+      visit item_path(item_3)
+      click_button "Add to Cart"
+      visit item_path(item_3)
+      click_button "Add to Cart"
+      visit item_path(item_3)
+      click_button "Add to Cart"
+
+      visit cart_path
+
+      within("#item-#{@item_1.id}") do
+        item_1_subtotal = 2 * @item_1.price
+        expect(page).to have_content(number_to_currency(@item_1.price))
+        expect(page).to have_content("Subtotal: #{number_to_currency(item_1_subtotal)}")
+      end
+
+      within("#item-#{@item_2.id}") do
+        item_2_subtotal = 3 * @item_2.price * (100-bd_1.pc_off)/100.0
+        expect(page).to have_content(number_to_currency(@item_2.price))
+        expect(page).to have_content("Subtotal: #{number_to_currency(item_2_subtotal)}")
+      end
+
+      within("#item-#{@item_3.id}") do
+        item_3_subtotal = 3 * item_3.price
+        expect(page).to have_content(number_to_currency(@item_2.price))
+        expect(page).to have_content("Subtotal: #{number_to_currency(item_3_subtotal)}")
+      end
+
+      expect(page).to have_content("Grand Total: #{number_to_currency(item_1_subtotal + item_2_subtotal + item_3_subtotal)}")
+    end
+
     it "I click on Empty Cart, all items are removed" do
       visit cart_path
       click_button "Empty Cart"

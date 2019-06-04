@@ -169,4 +169,10 @@ class User < ApplicationRecord
     update(role: "user")
     items.update_all(active: false)
   end
+
+  def highest_applicable_discount(quantity)
+    bulk_discounts.where("bulk_discounts.bulk_quantity <= ?", quantity)
+                  .order("bulk_discounts.pc_off DESC")
+                  .first
+  end
 end

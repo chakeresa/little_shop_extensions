@@ -368,5 +368,21 @@ RSpec.describe User, type: :model do
       expect(@merchant_1.reload.role).to eq("user")
       expect(@item_1.reload.active).to eq(false)
     end
+
+    it "when called on a merchant, #highest_applicable_discount returns the highest bulk discount pc_off that applies for the quantity ordered" do
+      merchant = create(:merchant)
+      bd_1 = create(:bulk_discount, user: merchant, bulk_quantity: 3, pc_off: 3)
+      bd_2 = create(:bulk_discount, user: merchant, bulk_quantity: 5, pc_off: 30)
+      bd_3 = create(:bulk_discount, user: merchant, bulk_quantity: 7, pc_off: 10)
+
+      # no bulk discounts apply:
+      expect(merchant.highest_applicable_discount(2)).to eq(nil)
+      # only bd_1 applies:
+      expect(merchant.highest_applicable_discount(3)).to eq(bd_1)
+      # bd_1 & bd_2 apply, bd_2 is a better discount:
+      expect(merchant.highest_applicable_discount(6)).to eq(bd_2)
+      # bd_1, bd_2, & bd_3 all apply, but bd_2 is the best discount:
+      expect(merchant.highest_applicable_discount(10)).to eq(bd_2)
+    end
   end
 end

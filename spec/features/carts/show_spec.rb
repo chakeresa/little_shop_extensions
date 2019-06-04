@@ -125,7 +125,7 @@ RSpec.describe "cart show page", type: :feature do
 
       # 3 of merchant_1's item_2 total - bulk discount does NOT apply (wrong merchant)
       merchant_2 = create(:merchant)
-      item_3 = create(:item, user: merchant_2, name: "Sofa")
+      item_3 = create(:item, user: merchant_2)
       visit item_path(item_3)
       click_button "Add to Cart"
       visit item_path(item_3)
@@ -135,22 +135,22 @@ RSpec.describe "cart show page", type: :feature do
 
       visit cart_path
 
+      item_1_subtotal = 2 * @item_1.price
       within("#item-#{@item_1.id}") do
-        item_1_subtotal = 2 * @item_1.price
         expect(page).to have_content(number_to_currency(@item_1.price))
         expect(page).to have_content("Subtotal: #{number_to_currency(item_1_subtotal)}")
       end
 
+      item_2_subtotal = 3 * @item_2.price * (100-bd_1.pc_off)/100.0
       within("#item-#{@item_2.id}") do
-        item_2_subtotal = 3 * @item_2.price * (100-bd_1.pc_off)/100.0
         expect(page).to have_content("Bulk discount applied (#{number_to_percentage(bd_1.pc_off, precision: 2)} off orders of #{bd_1.bulk_quantity} or more)")
         expect(page).to have_content(number_to_currency(@item_2.price * (100-bd_1.pc_off)/100.0))
         expect(page).to have_content("Subtotal: #{number_to_currency(item_2_subtotal)}")
       end
 
-      within("#item-#{@item_3.id}") do
-        item_3_subtotal = 3 * item_3.price
-        expect(page).to have_content(number_to_currency(@item_2.price))
+      item_3_subtotal = 3 * item_3.price
+      within("#item-#{item_3.id}") do
+        expect(page).to have_content(number_to_currency(item_3.price))
         expect(page).to have_content("Subtotal: #{number_to_currency(item_3_subtotal)}")
       end
 

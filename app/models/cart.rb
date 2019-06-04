@@ -25,12 +25,12 @@ class Cart
 
   def subtotal(item)
     quantity = item_and_quantity_hash[item]
-    item.price * quantity
+    item.bulk_price(quantity) * quantity
   end
 
   def grand_total
     item_and_quantity_hash.sum do |item, quantity|
-      item.price * quantity
+      item.bulk_price(quantity) * quantity
     end
   end
 

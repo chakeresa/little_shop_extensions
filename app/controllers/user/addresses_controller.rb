@@ -22,6 +22,20 @@ class User::AddressesController < User::BaseController
   end
 
   def update
+    @address = Address.find(params[:id])
+    if @address.user_id == current_user.id
+      if @address.update(address_params)
+        flash[:success] = "Updated \"#{params[:address][:nickname]}\" address"
+        redirect_to profile_path
+      else
+        flash[:danger] = @address.errors.full_messages.join(". ")
+        @user = current_user
+        render :edit
+      end
+
+    else
+      render file: "/public/404", status: 404
+    end
   end
 
   def destroy
@@ -46,6 +60,6 @@ class User::AddressesController < User::BaseController
 
   def address_params
     params[:address][:user_id] = current_user.id
-    params.require(:address).permit(:nickname, :street, :city, :state, :zip, :user_id)
+    params.require(:address).permit(:id, :nickname, :street, :city, :state, :zip, :user_id)
   end
 end

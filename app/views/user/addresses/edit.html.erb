@@ -1,4 +1,4 @@
-<%= form_for [@user, @address] do |f| %>
+<%= form_for @address, url: user_address_path(@address.id) do |f| %>
   <%= f.label :nickname %>
   <%= f.text_field :nickname %>
   <br>

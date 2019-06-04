@@ -5,7 +5,7 @@ RSpec.describe "Editing an existing address" do
     before(:each) do
       @user_1 = create(:user)
       @addr_1 = create(:address, user: @user_1)
-      @addr_2 = create(:address, user: @user_1)
+      # @addr_2 = create(:address, user: @user_1)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user_1)
 
       @nickname = "my work"
@@ -38,18 +38,18 @@ RSpec.describe "Editing an existing address" do
 
       expect(current_path).to eq(profile_path)
 
-      expect(page).to have_content("Updated \"#{nickname}\" address")
-      expect(new_address.nickname).to eq(@nickname)
-      expect(new_address.street).to eq(@street)
-      expect(new_address.city).to eq(@city)
-      expect(new_address.state).to eq(@state)
-      expect(new_address.zip).to eq(@zip)
+      expect(page).to have_content("Updated \"#{@nickname}\" address")
+      expect(@addr_1.reload.nickname).to eq(@nickname)
+      expect(@addr_1.reload.street).to eq(@street)
+      expect(@addr_1.reload.city).to eq(@city)
+      expect(@addr_1.reload.state).to eq(@state)
+      expect(@addr_1.reload.zip).to eq(@zip)
     end
 
-    it "if nickname field is left blank, it defaults to home" do
+    it "nickname input is required" do
       visit edit_user_address_path(@addr_1)
 
-      # DON'T fill_in "address[nickname]"
+      fill_in "address[nickname]", with: ""
       fill_in "address[street]", with: @street
       fill_in "address[city]", with: @city
       fill_in "address[state]", with: @state
@@ -57,19 +57,15 @@ RSpec.describe "Editing an existing address" do
 
       click_on "Update Address"
 
-      expect(page).to have_content("Updated \"home\" address")
-      expect(new_address.nickname).to eq("home")
-      expect(new_address.street).to eq(@street)
-      expect(new_address.city).to eq(@city)
-      expect(new_address.state).to eq(@state)
-      expect(new_address.zip).to eq(@zip)
+      expect(page).to have_field("address[nickname]")
+      expect(page).to have_content("Nickname can't be blank")
     end
 
     it "street input is required" do
       visit edit_user_address_path(@addr_1)
 
       fill_in "address[nickname]", with: @nickname
-      # DON'T fill_in "address[street]", with: @street
+      fill_in "address[street]", with: ""
       fill_in "address[city]", with: @city
       fill_in "address[state]", with: @state
       fill_in "address[zip]", with: @zip
@@ -85,7 +81,7 @@ RSpec.describe "Editing an existing address" do
 
       fill_in "address[nickname]", with: @nickname
       fill_in "address[street]", with: @street
-      # DON'T fill_in "address[city]", with: @city
+      fill_in "address[city]", with: ""
       fill_in "address[state]", with: @state
       fill_in "address[zip]", with: @zip
 
@@ -101,7 +97,7 @@ RSpec.describe "Editing an existing address" do
       fill_in "address[nickname]", with: @nickname
       fill_in "address[street]", with: @street
       fill_in "address[city]", with: @city
-      # DON'T fill_in "address[state]", with: @state
+      fill_in "address[state]", with: ""
       fill_in "address[zip]", with: @zip
 
       click_on "Update Address"
@@ -117,7 +113,7 @@ RSpec.describe "Editing an existing address" do
       fill_in "address[street]", with: @street
       fill_in "address[city]", with: @city
       fill_in "address[state]", with: @state
-      # DON'T fill_in "address[zip]", with: @zip
+      fill_in "address[zip]", with: ""
 
       click_on "Update Address"
 

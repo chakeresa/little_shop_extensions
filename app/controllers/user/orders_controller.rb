@@ -31,11 +31,11 @@ class User::OrdersController < User::BaseController
   private
 
   def change_address
-    if @order.status == "pending"
+    if @order.status == "pending" || @order.status == "cancelled"
       @order.update(address_id: params[:order][:address_id])
       flash[:success] = "Shipping address succcessfully changed"
     else
-      flash[:danger] = "Shipping address can only be changed for pending orders"
+      flash[:danger] = "Shipping address cannot be changed for completed orders"
     end
   end
 end

@@ -9,7 +9,9 @@
         <li>Last Updated: <%= Date.strptime(order.updated_at.to_s) %></li>
         <li>Status: <%= order.status %></li>
         <li>Total Cost: <%= number_to_currency(order.grand_total) %></li>
-        <li>Shipping to <%= order.address.nickname %> address: <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.zip %></li>
+        <% if order.address %>
+          <li>Shipping to <%= order.address.nickname %> address: <%= order.address.street %>, <%= order.address.city %>, <%= order.address.state %>, <%= order.address.zip %></li>
+        <% end %>
       </ul>
     </div>
   </div>

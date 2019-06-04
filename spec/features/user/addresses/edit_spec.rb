@@ -172,8 +172,56 @@ RSpec.describe "Editing an existing address" do
       end
     end
 
-    xit "I cannot edit an address associated with a completed order" do
+    it "I cannot edit an address associated with a completed (shipped or packaged) order" do
+      addr_3 = create(:address, user: @user_1)
+      packaged_order = create(:packaged_order, address: addr_3, user: @user_1)
 
+      addr_4 = create(:address, user: @user_1)
+      shipped_order = create(:shipped_order, address: addr_4, user: @user_1)
+
+      visit edit_user_address_path(addr_3)
+
+      fill_in "address[nickname]", with: @nickname
+      click_on "Update Address"
+
+      expect(page).to have_content("Cannot change an address that was used for packaged/shipped order(s)")
+      expect(@addr_1.reload.nickname).to_not eq(@nickname)
+
+      visit edit_user_address_path(addr_4)
+
+      fill_in "address[nickname]", with: @nickname
+      click_on "Update Address"
+
+      expect(page).to have_content("Cannot change an address that was used for packaged/shipped order(s)")
+      expect(@addr_1.reload.nickname).to_not eq(@nickname)
+    end
+
+    it "I can edit an address associated with a pending or cancelled order" do
+      addr_2 = create(:address, user: @user_1)
+      pending_order = create(:order, address: addr_2, user: @user_1)
+
+      addr_5 = create(:address, user: @user_1)
+      cancelled_order = create(:cancelled_order, address: addr_5, user: @user_1)
+
+      visit edit_user_address_path(addr_2)
+
+      fill_in "address[zip]", with: @zip
+      click_on "Update Address"
+
+      expect(current_path).to eq(profile_path)
+
+      expect(page).to have_content("Updated \"#{addr_2.nickname}\" address")
+      expect(addr_2.reload.zip).to eq(@zip)
+
+      visit edit_user_address_path(addr_5)
+
+      fill_in "address[street]", with: @street
+      click_on "Update Address"
+
+      expect(current_path).to eq(profile_path)
+
+      expect(page).to have_content("Updated \"#{addr_5.nickname}\" address")
+      expect(addr_5.reload.street).to eq(@street)
     end
   end
 end

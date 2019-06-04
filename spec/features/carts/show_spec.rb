@@ -143,7 +143,8 @@ RSpec.describe "cart show page", type: :feature do
 
       within("#item-#{@item_2.id}") do
         item_2_subtotal = 3 * @item_2.price * (100-bd_1.pc_off)/100.0
-        expect(page).to have_content(number_to_currency(@item_2.price))
+        expect(page).to have_content("Bulk discount applied (#{number_to_percentage(bd_1.pc_off, precision: 2)} off orders of #{bd_1.bulk_quantity} or more)")
+        expect(page).to have_content(number_to_currency(@item_2.price * (100-bd_1.pc_off)/100.0))
         expect(page).to have_content("Subtotal: #{number_to_currency(item_2_subtotal)}")
       end
 

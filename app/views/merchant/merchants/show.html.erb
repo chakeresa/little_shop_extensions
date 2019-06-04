@@ -1,6 +1,8 @@
 <div id="dashboard-show">
   <h1><%= @merchant.name %></h1>
   <%= link_to 'View all items for sale', merchant_items_path %>
+  <br>
+  <%= link_to 'View my bulk discounts', merchant_bulk_discounts_path %>
   <p>Email: <%= @merchant.email %></p>
   <% if @address %>
     <h5>Address:</h5>

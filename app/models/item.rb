@@ -14,7 +14,7 @@ class Item < ApplicationRecord
   DEFAULT_IMAGE = "https://www.ultimate-realty.com/wp-content/uploads/sites/6518/2019/04/Image-Coming-Soon.png"
 
   def self.active_items
-    self.where(active: true)
+    self.where(active: true).order(:id)
   end
 
   def self.sort_by_popularity(limit, direction)
@@ -56,12 +56,20 @@ class Item < ApplicationRecord
     order_items.where("order_items.order_id=?", order.id)
   end
 
-  def sufficient_inventory(order)
-    item_quantity = self.order_items.where("order_items.order_id=?", order.id).first.quantity
-    if (self.inventory) > item_quantity
-      return true
-    else
-      return false
+  def sufficient_inventory?(order)
+    item_quantity = order_items.where("order_items.order_id=?", order.id).first.quantity
+    inventory > item_quantity
+  end
+
+  def bulk_price(quantity)
+    percent_off = 0
+    if discount = highest_applicable_discount(quantity)
+      percent_off = discount.pc_off
     end
+    price * (100 - percent_off) / 100.0
+  end
+
+  def highest_applicable_discount(quantity)
+    user.highest_applicable_discount(quantity)
   end
 end

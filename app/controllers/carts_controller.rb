@@ -8,7 +8,6 @@ class CartsController < ApplicationController
     redirect_to items_path
   end
 
-
   def increment
     item = Item.find(params[:id])
     add_to_cart(item)
@@ -52,7 +51,7 @@ class CartsController < ApplicationController
   def checkout
     new_order = current_user.orders.create!(order_params)
     cart.item_and_quantity_hash.each do |item, quantity|
-      OrderItem.create(item: item, order: new_order, quantity: quantity, price_per_item: item.price)
+      OrderItem.create(item: item, order: new_order, quantity: quantity, price_per_item: item.bulk_price(quantity))
     end
     session.delete(:cart)
     flash[:success] = "Your order was created!"

@@ -33,6 +33,16 @@ RSpec.describe Cart do
       expect(cart_1.subtotal(item_1)).to eq(2 * item_1.price)
       expect(cart_1.subtotal(item_2)).to eq(3 * item_2.price)
     end
+
+    it "calculates the subtotal for a particular item (incorporating bulk discounts if applicable)" do
+      item_1 = create(:item)
+      item_2 = create(:item)
+      bulk_discount = create(:bulk_discount, user: item_2.user, bulk_quantity: 3)
+      cart_1 = Cart.new({item_1.id.to_s => 2, item_2.id.to_s => 3})
+
+      expect(cart_1.subtotal(item_1)).to eq(2 * item_1.price)
+      expect(cart_1.subtotal(item_2)).to eq(3 * item_2.price * (100 - bulk_discount.pc_off)/100.0)
+    end
   end
 
   describe "#grand_total" do

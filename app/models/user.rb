@@ -7,6 +7,7 @@ class User < ApplicationRecord
                         :role
   has_many :orders
   has_many :items
+  has_many :bulk_discounts
   has_one :primary_address, class_name: 'Address'
 
   has_many :addresses, dependent: :destroy
@@ -167,5 +168,11 @@ class User < ApplicationRecord
   def downgrade_to_regular_user
     update(role: "user")
     items.update_all(active: false)
+  end
+
+  def highest_applicable_discount(quantity)
+    bulk_discounts.where("bulk_discounts.bulk_quantity <= ?", quantity)
+                  .order("bulk_discounts.pc_off DESC")
+                  .first
   end
 end

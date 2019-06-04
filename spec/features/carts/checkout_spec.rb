@@ -45,6 +45,26 @@ RSpec.describe "Cart checkout functionality: " do
       expect(page).to have_content("Shipping to #{@addr_1.nickname} address: #{@addr_1.street}, #{@addr_1.city}, #{@addr_1.state}, #{@addr_1.zip}")
     end
 
+    it "applies bulk discounts when creating an order" do
+      bulk_discount = create(:bulk_discount, user: @merchant_1, bulk_quantity: 2) # will apply for item_1
+
+      visit cart_path
+
+      find('#order_address_id').select(@addr_1.street)
+      click_button 'Check Out'
+
+      new_order = Order.last
+
+      oi_1 = new_order.order_items.first
+      oi_2 = new_order.order_items.last
+
+      expect(oi_1.item_id).to eq(@item_1.id)
+      expect(oi_2.item_id).to eq(@item_2.id)
+
+      expect(oi_1.price_per_item).to eq(@item_1.price * (100 - bulk_discount.pc_off)/100.0)
+      expect(oi_2.price_per_item).to eq(@item_2.price)
+    end
+
     it "defaults to my primary address" do
       visit cart_path
 

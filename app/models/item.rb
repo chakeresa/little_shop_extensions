@@ -63,9 +63,13 @@ class Item < ApplicationRecord
 
   def bulk_price(quantity)
     percent_off = 0
-    if discount = user.highest_applicable_discount(quantity)
+    if discount = highest_applicable_discount(quantity)
       percent_off = discount.pc_off
     end
     price * (100 - percent_off) / 100.0
+  end
+
+  def highest_applicable_discount(quantity)
+    user.highest_applicable_discount(quantity)
   end
 end

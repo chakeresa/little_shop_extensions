@@ -212,5 +212,20 @@ RSpec.describe Item, type: :model do
       expect(item_1.bulk_price(6)).to eq(item_1.price * (100 - bulk_discount_2.pc_off)/100.0)
       expect(item_1.bulk_price(11)).to eq(item_1.price * (100 - bulk_discount_2.pc_off)/100.0) # not bulk_discount_3 because it's not as good of a deal
     end
+
+    it "#highest_applicable_discount returns the best applicable discount (highest percent off)" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, user: merchant_1)
+      bulk_discount_1 = create(:bulk_discount, user: merchant_1, bulk_quantity: 3, pc_off: 4)
+      bulk_discount_2 = create(:bulk_discount, user: merchant_1, bulk_quantity: 5, pc_off: 20)
+      bulk_discount_3 = create(:bulk_discount, user: merchant_1, bulk_quantity: 10, pc_off: 8)
+
+      expect(item_1.highest_applicable_discount(1)).to eq(nil)
+      expect(item_1.highest_applicable_discount(2)).to eq(nil)
+      expect(item_1.highest_applicable_discount(3)).to eq(bulk_discount_1)
+      expect(item_1.highest_applicable_discount(5)).to eq(bulk_discount_2)
+      expect(item_1.highest_applicable_discount(6)).to eq(bulk_discount_2)
+      expect(item_1.highest_applicable_discount(11)).to eq(bulk_discount_2) # not bulk_discount_3 because it's not as good of a deal
+    end
   end
 end

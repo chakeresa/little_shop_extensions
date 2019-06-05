@@ -58,7 +58,7 @@ class Item < ApplicationRecord
 
   def sufficient_inventory?(order)
     item_quantity = order_items.where("order_items.order_id=?", order.id).first.quantity
-    inventory > item_quantity
+    inventory >= item_quantity
   end
 
   def bulk_price(quantity)

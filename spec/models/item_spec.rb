@@ -141,6 +141,7 @@ RSpec.describe Item, type: :model do
       user = create(:user)
       order_1 = create(:order, user: user)
       order_4 = create(:order, user: user)
+      order_5 = create(:order, user: user)
 
       user_2 = create(:user)
       order_2 = create(:order, user: user_2)
@@ -172,6 +173,9 @@ RSpec.describe Item, type: :model do
       #order 4 with only other merchant's items.
       oi_8 = create(:order_item, item: item_1, order: order_4, quantity: 5, price_per_item: item_1.price)
 
+      #order 5 with pending status for current merchant's item, inventory equal to quantity
+      oi_9 = create(:order_item, item: item_2, order: order_5, quantity: 10, price_per_item: item_1.price)
+
       expect(item_3.item_fulfilled?(order_2)).to eq(true)
       expect(item_2.item_fulfilled?(order_2)).to eq(false)
       expect(item_2.item_fulfilled?(order_1)).to eq(false)
@@ -179,6 +183,7 @@ RSpec.describe Item, type: :model do
       expect(item_4.sufficient_inventory?(order_2)).to eq(false)
       expect(item_2.sufficient_inventory?(order_2)).to eq(true)
       expect(item_2.sufficient_inventory?(order_1)).to eq(true)
+      expect(item_2.sufficient_inventory?(order_5)).to eq(true)
     end
 
     it "#item_orders returns order_item objects for a specific item in an order" do

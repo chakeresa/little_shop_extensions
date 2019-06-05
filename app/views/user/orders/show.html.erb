@@ -11,20 +11,24 @@
   <p><%= @address.street %></p>
   <p><%= @address.city %>, <%= @address.state %></p>
   <p><%= @address.zip %></p>
-  <h6>or change address...</h6>
+  <% if @order.status == "pending" %>
+    <h6>or change address...</h6>
+  <% end %>
 <% else %>
   <h5>No address associated with this order. Select one below:</h5>
 <% end %>
-<%= form_tag(user_order_path(@order), method: "patch") do %>
-  <%= collection_select(
-    :order,
-    :address_id,
-    @addresses,
-    :id,
-    :street,
-    { selected: current_user.primary_address_id }
-  ) %>
-  <%= submit_tag("Change Shipping Address", class: "btn btn-primary") %>
+<% if @order.status == "pending" %>
+  <%= form_tag(user_order_path(@order), method: "patch") do %>
+    <%= collection_select(
+      :order,
+      :address_id,
+      @addresses,
+      :id,
+      :street,
+      { selected: current_user.primary_address_id }
+    ) %>
+    <%= submit_tag("Change Shipping Address", class: "btn btn-primary") %>
+  <% end %>
 <% end %>
 <br>
 <h5>Items Ordered:</h5>

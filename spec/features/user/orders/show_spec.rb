@@ -84,6 +84,24 @@ RSpec.describe "User Profile Order Show Page", type: :feature do
       expect(page).to have_content(@another_address.zip)
     end
 
+    it "does not show a dropdown/button to change the address for a packaged order" do
+      @order.update(status: "packaged")
+      visit user_order_path(@order)
+      expect(page).to_not have_button "Change Shipping Address"
+    end
+
+    it "does not show a dropdown/button to change the address for a shipped order" do
+      @order.update(status: "shipped")
+      visit user_order_path(@order)
+      expect(page).to_not have_button "Change Shipping Address"
+    end
+
+    it "does not show a dropdown/button to change the address for a cancelled order" do
+      @order.update(status: "cancelled")
+      visit user_order_path(@order)
+      expect(page).to_not have_button "Change Shipping Address"
+    end
+
     it "does not allow me to change the address for a packaged order" do
       visit user_order_path(@order)
 

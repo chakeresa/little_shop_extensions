@@ -93,8 +93,6 @@ RSpec.describe Order, type: :model do
     end
 
     it '::top_3_states shows shows the top 3 states where any orders were shipped (by number of orders), and count of orders' do
-      # to-do: move to Order class
-
       top_3_states = ["KS", "CO", "IL"]
       top_3_states_order_counts = [4, 2, 1]
 
@@ -106,8 +104,6 @@ RSpec.describe Order, type: :model do
     end
 
     it '::top_3_cities shows the top 3 city/state combos where any orders were shipped (by number of orders), and count of orders' do
-      # to-do: move to Order class
-
       top_3_cities = ["Topeka", "Denver", "Springfield"]
       top_3_states = ["KS", "CO", "IL"]
       top_3_cities_order_counts = [3, 2, 1]

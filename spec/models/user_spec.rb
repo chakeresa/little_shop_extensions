@@ -15,6 +15,16 @@ RSpec.describe User, type: :model do
     it {should have_many :addresses}
     it {should have_many :bulk_discounts}
     it {should have_one :primary_address}
+
+    it "destroying a merchant destroys its bulk discounts" do
+      merchant = create(:merchant)
+      bulk_discount = create(:bulk_discount, user: merchant)
+
+      merchant.destroy
+
+      expect(User.count).to eq(0)
+      expect(BulkDiscount.count).to eq(0)
+    end
   end
 
   describe 'Class Methods' do

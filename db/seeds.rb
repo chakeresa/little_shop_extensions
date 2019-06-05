@@ -8,6 +8,7 @@
 require 'factory_bot_rails'
 include FactoryBot::Syntax::Methods
 
+BulkDiscount.destroy_all
 OrderItem.destroy_all
 Order.destroy_all
 Item.destroy_all
@@ -23,6 +24,8 @@ create(:address, user: user)
 
 merchant_1 = create(:merchant, email: "merchant@email.com", password: "pw123")
 create(:address, user: merchant_1)
+create(:bulk_discount, user: merchant_1, bulk_quantity: 2, pc_off: 10.0)
+create(:bulk_discount, user: merchant_1, bulk_quantity: 3, pc_off: 20.0)
 
 existing_user = create(:user, email: "existingemail@gmail.com")
 create(:address, user: existing_user)
@@ -87,3 +90,5 @@ puts "Users created: #{User.count.to_i}"
 puts "Orders created: #{Order.count.to_i}"
 puts "Items created: #{Item.count.to_i}"
 puts "OrderItems created: #{OrderItem.count.to_i}"
+puts "Addresses created: #{Address.count.to_i}"
+puts "BulkDiscounts created: #{BulkDiscount.count.to_i}"

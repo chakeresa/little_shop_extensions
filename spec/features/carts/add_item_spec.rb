@@ -12,7 +12,7 @@ RSpec.describe "adding items to their cart" do
       visit item_path(@item_1)
       click_button "Add to Cart"
 
-      expect(page).to have_content("You now have 1 #{@item_1.name} in your cart.")
+      expect(page).to have_content("You now have 1 #{@item_1.name} in your cart")
       expect(current_path).to eq(items_path)
     end
 
@@ -26,7 +26,7 @@ RSpec.describe "adding items to their cart" do
       visit item_path(@item_1)
       click_button "Add to Cart"
 
-      expect(page).to have_content("You now have 2 #{@item_1.name}s in your cart.")
+      expect(page).to have_content("You now have 2 #{@item_1.name}s in your cart")
     end
 
     it "displays the total number of items in the cart" do
@@ -64,7 +64,7 @@ RSpec.describe "adding items to their cart" do
       visit item_path(@item_1)
       click_button "Add to Cart"
 
-      expect(page).to have_content("You now have 1 #{@item_1.name} in your cart.")
+      expect(page).to have_content("You now have 1 #{@item_1.name} in your cart")
     end
 
     it "the message correctly increments for multiple items" do
@@ -77,7 +77,7 @@ RSpec.describe "adding items to their cart" do
       visit item_path(@item_1)
       click_button "Add to Cart"
 
-      expect(page).to have_content("You now have 2 #{@item_1.name}s in your cart.")
+      expect(page).to have_content("You now have 2 #{@item_1.name}s in your cart")
     end
 
     it "displays the total number of items in the cart" do

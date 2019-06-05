@@ -20,7 +20,6 @@ RSpec.describe "As a visitor", type: :feature do
 
   context 'I visit my cart with items' do
     it 'I see a button to add items to my cart' do
-
       visit cart_path
 
       expect(page).to have_button("+")
@@ -29,7 +28,11 @@ RSpec.describe "As a visitor", type: :feature do
 
       within "#item-#{@item_1.id}" do
         click_button "+"
-        "You have added 1 #{@item_1.name} to your cart."
+      end
+
+      expect(page).to have_content("You now have #{pluralize(3, @item_1.name)} in your cart")
+
+      within "#item-#{@item_1.id}" do
         click_button "+"
         expect(page).to have_content(@item_1.inventory)
       end
@@ -40,7 +43,6 @@ RSpec.describe "As a visitor", type: :feature do
 
   context 'I visit my cart with items ' do
     it 'I see a button to remove an item completely from cart' do
-
       visit cart_path
 
       within "#item-#{@item_2.id}" do
@@ -48,7 +50,7 @@ RSpec.describe "As a visitor", type: :feature do
       end
 
       expect(page).to_not have_link("#{@item_2.name}")
-      expect(page).to have_content("You now removed all #{@item_2.name} in your cart.")
+      expect(page).to have_content("You have removed #{@item_2.name} from your cart")
     end
   end
 
